@@ -1,0 +1,3 @@
+[submodule "vendor/dynamic"]
+	path = vendor/dynamic
+	url = https://github.com/Trantorian1/dynamic.git
