@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 14:37:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/16 15:48:02 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/16 15:51:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,17 +146,17 @@ static size_t	tokenise_redir(
 		&& str.get[i_curr] != '>'
 		&& str.get[i_curr] != '|'
 	) {
-		if (str.get[i_curr] == '\'')
-		{
-			if (tokenise_quotation(str, redir, &i_curr, &i_prev, '\''))
-				return (EXIT_FAILURE);
-		}
+		if (
+			str.get[i_curr] == '\'' 
+			&& tokenise_quotation(str, redir, &i_curr, &i_prev, '\'')
+		)
+			return (EXIT_FAILURE);
 
-		else if (str.get[i_curr] == '"')
-		{
-			if (tokenise_quotation(str, redir, &i_curr, &i_prev, '"'))
-				return (EXIT_FAILURE);
-		}
+		else if (
+			str.get[i_curr] == '"'
+			&& tokenise_quotation(str, redir, &i_curr, &i_prev, '"')
+		)
+			return (EXIT_FAILURE);
 
 		else
 			i_curr++;
