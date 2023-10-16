@@ -1,0 +1,97 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    build_debug.mf                                     :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: emcnab <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/04/25 15:27:16 by emcnab            #+#    #+#              #
+#    Updated: 2023/10/09 10:08:49 by marvin           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+# **************************************************************************** #
+#                               COMPILATIONS VARS                              #
+# **************************************************************************** #
+
+DIR_BUILD = ./build/
+DIR_OBJS = $(DIR_BUILD)/debug/objs
+DIR_DEPS = $(DIR_BUILD)/deps
+DIR_SRCS = ./src
+DIR_INCL = ./include
+DIR_BIN = ./bin
+
+FILES_SRCS = $(shell find ./ -wholename "$(DIR_SRCS)/*.c")
+FILES_OBJS = $(patsubst $(DIR_SRCS)/%.c,$(DIR_OBJS)/%.o,$(FILES_SRCS))
+FILES_DEPS = $(patsubst $(DIR_SRCS)/%.c,$(DIR_DEPS)/%.d,$(FILES_SRCS))
+
+C_COMPILER = clang
+I_FLAGS = $(foreach dir,$(DIR_INCL),-I$(dir) )
+C_FLAGS = -Wall -Wextra -g -fPIC $(I_FLAGS)
+C_DEPS = -MM -MP $(I_FLAGS)
+
+BIN = $(DIR_BIN)/libdynamic_test.so
+
+# **************************************************************************** #
+#                               COMPILATIONS TASKS                             #
+# **************************************************************************** #
+
+all: $(BIN)
+
+$(BIN): $(FILES_OBJS) $(FILES_DEPS)
+# 	displays build command
+	@printf "$(BOLD)$(BLUE)building $(WHITE)%-30s$(RESET) $(CYAN)$(C_COMPILER) -shared$(RESET)\n" "$@"
+# 	builds binary
+	@mkdir -p $(@D)
+	@$(C_COMPILER) -shared -o $(BIN) $(FILES_OBJS)
+
+
+
+$(DIR_OBJS)/%.o: $(DIR_SRCS)/%.c
+# 	displays build command
+	@printf "$(GREEN)building $(WHITE)%-30s$(RESET) $(CYAN)$(C_COMPILER) $(C_FLAGS)\n$(RESET)" "$(notdir $@)"
+# 	builds object file
+	@mkdir -p $(@D)
+	@$(C_COMPILER) $(C_FLAGS) -c $< -o $@
+
+
+
+$(DIR_DEPS)/%.d: $(DIR_SRCS)/%.c
+	@mkdir -p $(@D)
+	@$(C_COMPILER) $(C_FLAGS) $(C_DEPS) -MT $(DIR_OBJS)/$*.o -MF $@ $<
+
+
+
+clean:
+	@echo "$(RED)removing $(WHITE)*.o$(RESET)"
+	@rm -f $(FILES_OBJS)
+	@echo "$(RED)removing $(WHITE)*.d$(RESET)"
+	@rm -f $(FILES_DEPS)
+
+
+
+fclean: clean
+	@echo "$(BOLD)$(RED)removing $(WHITE)$(BIN)$(RESET)"
+	@rm -f $(BIN)
+
+
+
+re: fclean
+	@make -s all
+
+
+
+debug:
+	@echo $(FILES_SRCS)
+	@echo $(FILES_OBJS)
+	@echo $(FILES_DEPS)
+	@echo $(C_FLAGS)
+
+
+
+-include $(FILES_DEPS)
+-include ./build/colors.mf
+
+
+
+.PHONY: all submodules clean fclean re debug
