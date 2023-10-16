@@ -6,11 +6,15 @@
 #    By: emcnab <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/26 13:40:57 by emcnab            #+#    #+#              #
-#    Updated: 2023/10/09 15:27:21 by marvin           ###   ########.fr        #
+#    Updated: 2023/10/16 11:34:35 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-VALGRIND = valgrind --trace-children=yes --leak-check=full --show-leak-kinds=all
+VALGRIND = valgrind              \
+		   --trace-children=yes  \
+		   --leak-check=full     \
+		   --show-leak-kinds=all \
+		   --suppressions=supp.so
 
 # **************************************************************************** #
 #                               COMPILATIONS VARS                              #
@@ -20,7 +24,7 @@ DIR_BUILD = build
 DIR_OBJS = $(DIR_BUILD)/debug/objs
 DIR_DEPS = $(DIR_BUILD)/deps/test
 DIR_SRCS = ./test
-DIR_INCL = ./include
+DIR_INCL = ./include ./vendor
 DIR_BIN = bin
 
 FILES_SRCS = $(shell find ./ -wholename "$(DIR_SRCS)/*.c")
@@ -28,7 +32,7 @@ FILES_TEST = $(patsubst $(DIR_SRCS)/%.c,$(DIR_BIN)/test/%,$(FILES_SRCS))
 FILES_DEPS = $(patsubst $(DIR_SRCS)/%.c,$(DIR_DEPS)/%.d,$(FILES_SRCS))
 
 SILENCED = -Wno-padded -Wno-nullability-extension -Wno-missing-variable-declarations
-LIBS = -lcriterion -L$(DIR_BIN) -ldynamic_test
+LIBS = -L$(DIR_BIN) -lminishell_test -Lvendor/dynamic -ldynamic -lreadline -lcriterion 
 
 C_COMPILER = clang
 I_FLAGS = $(foreach dir,$(DIR_INCL),-I$(dir) )
@@ -45,10 +49,10 @@ all: $(FILES_TEST)
 
 $(DIR_BIN)/test/%: $(DIR_SRCS)/%.c $$(subst test_,,src/$$*.c)
 # 	displays build command
-	@printf "$(GREEN)building $(WHITE)%-30s$(RESET) $(CYAN)$(C_COMPILER) $(C_FLAGS)\n$(RESET)" "$(notdir $@)"
+	@printf "$(GREEN)building $(WHITE)%-30s$(RESET) $(CYAN)$(C_COMPILER) $(C_FLAGS) $(LIBS)\n$(RESET)" "$(notdir $@)"
 # 	builds object file
 	@mkdir -p $(@D)
-	@$(C_COMPILER) $(C_FLAGS) $(LIBS) $< -o $@
+	@$(C_COMPILER) $< $(I_FLAGS) $(LIBS) -o $@
 	@export LD_LIBRARY_PATH=$(pwd)$(DIR_BIN):$(LD_LIBRARY_PATH); \
 	$(VALGRIND) $@
 

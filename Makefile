@@ -6,7 +6,7 @@
 #    By: emcnab <emcnab@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 14:08:48 by emcnab            #+#    #+#              #
-#    Updated: 2023/10/10 09:51:15 by marvin           ###   ########.fr        #
+#    Updated: 2023/10/16 11:39:22 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,12 +23,26 @@ all: debug
 fclean: fclean_debug fclean_test fclean_final
 
 # **************************************************************************** #
+#                                   SUBMODULES                                 #
+# **************************************************************************** #
+
+dynamic:
+	@echo ">> dynamic"
+	@make --silent --directory=./vendor/dynamic final
+	@echo "<< dynamic"
+
+fclean_dynamic:
+	@echo ">> dynamic"
+	@make --silent --directory=./vendor/dynamic fclean
+	@echo << dynamic
+
+# **************************************************************************** #
 #                                   DEBUG TASK                                 #
 # **************************************************************************** #
 
-debug:
+debug: dynamic
 	@echo "$(BOLD)$(RED)[ Building in Debug Mode ]$(RESET)"
-	@$(DOCKER) make -j$(CORES) --silent --file=./build/build_debug.mf
+	@make -j$(CORES) --silent --file=./build/build_debug.mf
 
 clean_debug:
 	@echo "$(BOLD)$(RED)[ Removing all Debug objects ]$(RESET)"

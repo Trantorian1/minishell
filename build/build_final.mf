@@ -6,7 +6,7 @@
 #    By: emcnab <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 15:14:44 by emcnab            #+#    #+#              #
-#    Updated: 2023/10/16 07:42:21 by marvin           ###   ########.fr        #
+#    Updated: 2023/09/28 13:19:21 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,29 +14,29 @@
 #                               COMPILATIONS VARS                              #
 # **************************************************************************** #
 
-DIR_BUILD = ./build
-DIR_OBJS = $(DIR_BUILD)/objs
-DIR_DEPS = $(DIR_BUILD)/deps
-DIR_SRCS = ./src
-DIR_INCL = ./include
-DIR_BIN = ./bin
+DIR_BUILD  = ./build/
+DIR_OBJS   = $(DIR_BUILD)/objs
+DIR_DEPS   = $(DIR_BUILD)/deps
+DIR_SRCS   = ./src
+DIR_INCL   = ./include
+DIR_BIN    = ./bin
 
 FILES_SRCS = $(shell find ./ -wholename "$(DIR_SRCS)/*.c")
 FILES_OBJS = $(patsubst $(DIR_SRCS)/%.c,$(DIR_OBJS)/%.o,$(FILES_SRCS))
 FILES_DEPS = $(patsubst $(DIR_SRCS)/%.c,$(DIR_DEPS)/%.d,$(FILES_SRCS))
 
-OPT = -O3
+OPT        = 
+LIBS       = -lreadline -Lvendor/dynamic/ -ldynamic
+# DEBUG      = -fsanitize=address,leak -g 
+DEBUG      = -g
 
 C_COMPILER = clang
-I_FLAGS = $(foreach dir,$(DIR_INCL),-I$(dir) )
-SILENCED = -Wno-padded -Wno-nullability-extension
-C_FLAGS = -Wall -Wextra -Werror -Weverything $(SILENCED) $(OPT) $(I_FLAGS)
-C_DEPS = -MM -MP $(I_FLAGS)
+I_FLAGS    = $(foreach dir,$(DIR_INCL),-I$(dir)) -I vendor
+SILENCED   = -Wno-padded -Wno-nullability-extension
+C_FLAGS    = -Wall -Wextra -Werror -Weverything $(SILENCED) $(OPT) $(DEBUG) $(I_FLAGS)
+C_DEPS     = -MM -MP $(I_FLAGS)
 
-A_COMPILER = ar
-A_FLAGS = -rc
-
-BIN = libdynamic.a
+BIN        = $(DIR_BIN)/minishell
 
 # **************************************************************************** #
 #                               COMPILATIONS TASKS                             #
@@ -44,12 +44,12 @@ BIN = libdynamic.a
 
 all: $(BIN)
 
-$(BIN): $(FILES_OBJS) $(FILES_DEPS)
+$(BIN): $(FILES_OBJS) $(FILES_DEPS) ./vendor/dynamic/libdynamic.a
 # 	displays build command
 	@printf "$(BOLD)$(BLUE)building $(WHITE)%-30s$(RESET) $(CYAN)$(C_COMPILER) $(C_FLAGS) $(FILES_OBJS) -o $(BIN) $(LIBS)$(RESET)\n" "$@"
 # 	builds binary
 	@mkdir -p $(@D)
-	@$(A_COMPILER) $(A_FLAGS) $(BIN) $(FILES_OBJS) 
+	@$(C_COMPILER) $(C_FLAGS) $(FILES_OBJS) -o $(BIN) $(LIBS)
 
 
 
@@ -88,14 +88,11 @@ re: fclean
 
 
 debug:
-	@echo "> src:"
 	@echo $(FILES_SRCS)
-	@echo "> obj:"
 	@echo $(FILES_OBJS)
-	@echo "> dep:"
 	@echo $(FILES_DEPS)
-	@echo "> flags:"
 	@echo $(C_FLAGS)
+	echo $(TARGET)
 
 
 
@@ -104,4 +101,4 @@ debug:
 
 
 
-.PHONY: all clean fclean re debug
+.PHONY: all submodules clean fclean re debug
