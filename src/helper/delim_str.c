@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state_tokenise.h                                   :+:      :+:    :+:   */
+/*   delim_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 13:41:10 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/23 13:42:28 by marvin           ###   ########.fr       */
+/*   Created: 2023/10/23 13:19:29 by marvin            #+#    #+#             */
+/*   Updated: 2023/10/23 13:23:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STATE_TOKENISE_H
-# define STATE_TOKENISE_H
+#include "delim_str.h"
 
-# include <stdint.h>
-# include "dynamic/string.h"
-# include "s_data.h"
+#include "dynamic/string.h"
+#include "d_str.h"
 
-uint8_t	state_tokenise(t_data *_Nonnull data);
+t_cstr _Nonnull	delim_str(t_str str)
+{
+	if (str_eq(str, PIPE))
+		return ("PIPE");
+	else if (str_eq(str, QUOTE_SINGLE))
+		return ("QUOTE_SINGLE");
+	else if (str_eq(str, QUOTE_DOUBLE))
+		return ("QUOTE_DOUBLE");
+	else if (str_eq(str, WHITESPACE))
+		return ("WHITESPACE");
 
-#endif
+	return (str.get);
+}
