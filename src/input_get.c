@@ -1,41 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   1_parse.c                                          :+:      :+:    :+:   */
+/*   input_get.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 12:28:08 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/16 15:58:05 by marvin           ###   ########.fr       */
+/*   Created: 2023/10/16 15:56:15 by marvin            #+#    #+#             */
+/*   Updated: 2023/10/16 15:57:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "state_parse.h"
+#include "input_get.h"
 
-#include <readline/readline.h>
 #include <stdlib.h>
-#include <stdint.h>
+#include <readline/readline.h>
 
 #include "dynamic/vector.h"
 #include "dynamic/string.h"
-#include "input_get.h"
 
-#include "s_data.h"
-#include "d_str.h"
-
-uint8_t	state_parse(t_data *_Nonnull data)
+t_vptr *_Nullable	input_get(char *_Nonnull prompt)
 {
-	t_vptr	*user_input;
+	t_cstr	tmp;
+	t_str	input;
+	t_vptr	*line_arr;
 
-	if (data == NULL)
-		return (EXIT_FAILURE);
+	// checks for invalid parameters
+	if (prompt == NULL)
+		return (NULL);
 
-	user_input = input_get(PROMPT_DEFAULT);
-	if (user_input == NULL)
-		return (EXIT_FAILURE);
+	// user input is split at every newline
+	tmp = readline(prompt);
+	if (tmp == NULL)
+		return (NULL);
 
-	data->user_input = user_input;
-	data->index_line = 0;
+	input = str_create(tmp);
+	line_arr = str_split(input, "\n");
 
-	return (EXIT_SUCCESS);
+	// frees up unnecessary variables
+	free(tmp);
+	str_destroy(&input);
+
+	return (line_arr);
 }
+

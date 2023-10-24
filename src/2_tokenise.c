@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:42:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/23 16:07:10 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/24 14:16:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ static size_t	tokenise_redir(
 	save_prev(redir, input, i_prev, i_curr);
 	vstr_append(redir, str_create(WHITESPACE));
 
-	return (i_curr);
+	return (i_curr + 1);
 }
 
 static uint8_t	tokenise_arg(

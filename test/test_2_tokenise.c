@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:32:15 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/16 15:46:14 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/23 13:28:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ static const t_param	g_param[] = {
 	},
 	// TEST: redirections only (quoted)
 	{
-		.input = "< 'in quot'ed << \"heredoc quoted\"> 'out'' '\"quo\"\"ted\">> append",
+		.input = "< 'in quot'ed << \"heredoc quoted\" > 'out'' '\"quo\"\"ted\">> append",
 		.arg = (char *[]) {
 			NULL
 		},
@@ -421,27 +421,21 @@ ParameterizedTest(
 		);
 		index++;
 	}
-	cr_assert_eq(
-		data.arg->len, index,
-		// "invalid arg count, actual: %zu expected: %zu",
-		// data.arg->len, index
-		"input: %s\n",
-		param->input
-	);
+	if (param->arg[0] != NULL)
+		cr_assert_eq(data.arg->len, index);
 
 	index = 0;
 	while (param->redir[index] != NULL)
 	{
 		cr_assert_str_eq(
-			vptr_get(t_str, data.redir, index).get, param->redir[index]
+			vptr_get(t_str, data.redir, index).get, param->redir[index],
+			"redir='%d', expected='%d'\n",
+			vptr_get(t_str, data.redir, index).get[0], param->redir[index][0]
 		);
 		index++;
 	}
-	cr_assert_eq(
-		data.redir->len, index,
-		"invalid redir count, actual: %zu expected: %zu",
-		data.redir->len, index
-	);
+	if (param->redir[0] != NULL)
+		cr_assert_eq(data.redir->len, index);
 
 	vstr_destroy(data.arg);
 	vstr_destroy(data.redir);

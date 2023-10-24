@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 09:59:19 by marvin            #+#    #+#             */
-/*   Updated: 2023/09/06 14:49:25 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/23 13:15:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ uint8_t	stdout_read(t_str *_Nonnull str, int32_t fd)
 			return (EXIT_FAILURE);
 		buffer[n] = '\0';
 		// ...and appends contents to string
-		str_append(str, buffer);
+		str_append_str(str, buffer);
 	}
 
 	return (EXIT_SUCCESS);
