@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/16 12:36:25 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/24 22:29:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdbool.h>
 
 #include "state_parse.h"
+#include "env_create.h"
 #include "s_data.h"
 
 static t_data	g_data = {
@@ -28,11 +29,12 @@ static t_data	g_data = {
 	.redir       = NULL,
 };
 
-int32_t		main(int32_t argc, char **argv, char **envp)
+int32_t		main(int32_t argc, t_cstr *argv, t_cstr *envp)
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
+
+	g_data.env = (t_vptr *_Nonnull)env_create(envp);
 
 	while (!g_data.exit)
 	{
@@ -44,4 +46,3 @@ int32_t		main(int32_t argc, char **argv, char **envp)
 
 	return (EXIT_SUCCESS);
 }
-
