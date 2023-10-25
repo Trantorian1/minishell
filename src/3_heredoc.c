@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:39:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/24 16:39:30 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 17:02:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static t_str	delimiter_get(
 	str_curr = vptr_get(t_str, redir, i_curr);
 	while (!str_eq(str_curr, WHITESPACE))
 	{
-		if (!str_eq(str_curr, QUOTE_DOUBLE) || !str_eq(str_curr, QUOTE_SINGLE))
+		if (!str_eq(str_curr, QUOTE_DOUBLE) && !str_eq(str_curr, QUOTE_SINGLE))
 			str_append_str(&delimiter, str_curr.get);
 
 		vptr_rm(redir, i_curr);
