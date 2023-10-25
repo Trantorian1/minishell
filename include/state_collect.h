@@ -1,35 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   s_data.h                                           :+:      :+:    :+:   */
+/*   state_collect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/10 08:15:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/25 01:08:10 by marvin           ###   ########.fr       */
+/*   Created: 2023/10/25 00:58:40 by marvin            #+#    #+#             */
+/*   Updated: 2023/10/25 00:59:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef S_DATA_H
-# define S_DATA_H
+#ifndef STATE_COLLECT_H
+# define STATE_COLLECT_H
 
 # include <stdint.h>
-# include "dynamic/vector.h"
-# include "dynamic/string.h"
+# include "s_data.h"
 
-// TODO: pack this!!!
+uint8_t	state_collect(t_data *_Nonnull data);
 
-typedef struct s_data
-{
-	size_t				index_line;
-	t_vptr *_Nonnull	user_input;
-	t_vptr *_Nonnull	arg;
-	t_vptr *_Nonnull	redir;
-	t_vptr *_Nonnull	env;
-	t_vptr *_Nonnull	cmd;
-	uint8_t				error_code;
-	uint8_t				exit;
-}	t_data;
-
-#endif // !S_DATA_H
-
+#endif
