@@ -1,34 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   s_data.h                                           :+:      :+:    :+:   */
+/*   vcmd_destroy.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/10 08:15:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/25 17:47:21 by marvin           ###   ########.fr       */
+/*   Created: 2023/10/25 17:48:00 by marvin            #+#    #+#             */
+/*   Updated: 2023/10/25 17:49:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef S_DATA_H
-# define S_DATA_H
+#ifndef VCMD_DESTROY_H
+# define VCMD_DESTROY_H
 
-# include <stdint.h>
 # include "dynamic/vector.h"
-# include "dynamic/string.h"
 
-// TODO: pack this!!!
+void	vcmd_destroy(t_vptr *_Nullable vptr);
 
-typedef struct s_data
-{
-	size_t				index_line;
-	t_vptr *_Nonnull	user_input;
-	t_vptr *_Nonnull	arg;
-	t_vptr *_Nonnull	redir;
-	t_vptr *_Nonnull	env;
-	t_vptr *_Nonnull	cmd;
-	uint8_t				exit;
-}	t_data;
-
-#endif // !S_DATA_H
-
+#endif
