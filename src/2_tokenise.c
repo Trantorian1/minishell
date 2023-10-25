@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:42:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/24 14:16:16 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/24 23:48:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 #include "d_str.h"
 
-static uint8_t	tokenise_arg(
+static uint8_t	tokenise_impl(
 	t_vptr *_Nonnull arg, 
 	t_vptr *_Nonnull redir, 
 	t_str input
@@ -40,8 +40,9 @@ uint8_t	state_tokenise(t_data *_Nonnull data)
 	data->arg = vptr_create(t_str, 0);
 	data->redir = vptr_create(t_str, 0);
 
-	if (tokenise_arg(data->arg, data->redir, line) == EXIT_FAILURE)
+	if (tokenise_impl(data->arg, data->redir, line) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+
 	data->index_line++;
 
 	return (EXIT_SUCCESS);
@@ -196,7 +197,7 @@ static size_t	tokenise_redir(
 	return (i_curr + 1);
 }
 
-static uint8_t	tokenise_arg(
+static uint8_t	tokenise_impl(
 	t_vptr *_Nonnull arg, 
 	t_vptr *_Nonnull redir, 
 	t_str input
