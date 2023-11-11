@@ -1,22 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_cd.h                                       :+:      :+:    :+:   */
+/*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 18:49:55 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 21:35:41 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/11 20:29:45 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/11 20:39:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_CD_H
-# define BUILTIN_CD_H
+#include "builtin_unset.h"
 
-# include <stdint.h>
-# include "s_data.h"
-# include "s_cmd.h"
+#include <stddef.h>
+#include <stdlib.h>
 
-uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd);
+#include "env_try_delete.h"
 
-#endif
+uint8_t	builtin_unset(t_data *_Nonnull data, t_cmd cmd)
+{
+	size_t	index;
+
+	if (data == NULL)
+		return (EXIT_FAILURE);
+
+	index = 1;
+	while (cmd.arg[index] != NULL)
+	{
+		env_try_delete(data->env, cmd.arg[index]);
+		index++;
+	}
+
+	return (EXIT_FAILURE);
+}

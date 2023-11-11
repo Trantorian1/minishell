@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 18:48:32 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 20:05:52 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/11 22:13:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@ t_builtin	builtin_get(t_cstr _Nonnull cmd)
 		return (BUILTIN_EXPORT);
 	else if (cstr_eq(cmd, "env"))
 		return (BUILTIN_ENV);
+	else if (cstr_eq(cmd, "unset"))
+		return (BUILTIN_UNSET);
+	else if (cstr_eq(cmd, "pwd"))
+		return (BUILTIN_PWD);
+	else if (cstr_eq(cmd, "cd"))
+		return (BUILTIN_CD);
 
 	return (BUILTIN_NONE);
 }

@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_cd.h                                       :+:      :+:    :+:   */
+/*   env_try_delete.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 18:49:55 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 21:35:41 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/11 20:32:44 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/11 20:42:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_CD_H
-# define BUILTIN_CD_H
+#ifndef ENV_TRY_DELETE_H
+# define ENV_TRY_DELETE_H
 
 # include <stdint.h>
-# include "s_data.h"
-# include "s_cmd.h"
+#include "dynamic/vector.h"
+# include "dynamic/string.h"
+# include "s_env.h"
 
-uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd);
+uint8_t	env_try_delete(t_vptr *_Nonnull env, t_cstr _Nonnull key);
 
 #endif

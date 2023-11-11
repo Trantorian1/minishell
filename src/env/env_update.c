@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:27:16 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/25 16:26:41 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/11 20:44:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_vptr *_Nullable	env_update(t_vptr *_Nonnull env, t_cstr _Nonnull cstr)
 		return (NULL);
 
 	pair_new = env_pair_create(cstr);
-	if (pair_new.key.len == 0 || pair_new.val.len == 0)
+	if (pair_new.key.len == 0)
 	{
 		env_pair_destroy(&pair_new);
 		return (NULL);

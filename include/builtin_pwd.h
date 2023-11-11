@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_cd.h                                       :+:      :+:    :+:   */
+/*   builtin_pwd.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 18:49:55 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 21:35:41 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/11 20:50:41 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/11 20:53:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_CD_H
-# define BUILTIN_CD_H
+#ifndef BUILTIN_PWD_H
+# define BUILTIN_PWD_H
 
 # include <stdint.h>
 # include "s_data.h"
 # include "s_cmd.h"
 
-uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd);
+uint8_t	builtin_pwd(t_data *_Nonnull data, t_cmd cmd);
 
 #endif

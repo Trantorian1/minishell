@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 18:27:31 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 20:05:25 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/11 22:13:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@
 typedef enum e_builtin
 {
 	BUILTIN_NONE,
-	BUILTIN_EXIT,
 	BUILTIN_ECHO,
+	BUILTIN_CD,
+	BUILTIN_PWD,
 	BUILTIN_EXPORT,
+	BUILTIN_UNSET,
 	BUILTIN_ENV,
+	BUILTIN_EXIT,
 	E_BUILTIN_SIZE
 }	t_builtin;
 
