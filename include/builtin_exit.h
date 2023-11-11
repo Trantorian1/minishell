@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   s_cmd.h                                            :+:      :+:    :+:   */
+/*   builtin_exit.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 01:01:34 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/26 16:58:42 by marvin           ###   ########.fr       */
+/*   Created: 2023/10/26 19:09:52 by marvin            #+#    #+#             */
+/*   Updated: 2023/10/26 19:12:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef S_CMD_H
-# define S_CMD_H
+#ifndef BUILTIN_EXIT_H
+# define BUILTIN_EXIT_H
 
-# include "dynamic/string.h"
+# include <stdint.h>
+# include "s_data.h"
 
-typedef struct s_cmd
-{
-	t_cstr	*arg;
-	t_vptr	*redir;
-}	t_cmd;
+uint8_t	builtin_exit(t_data *_Nonnull data);
 
 #endif

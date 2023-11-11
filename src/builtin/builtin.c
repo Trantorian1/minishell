@@ -1,40 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   8_cleanup.c                                        :+:      :+:    :+:   */
+/*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 17:43:44 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 17:40:27 by marvin           ###   ########.fr       */
+/*   Created: 2023/10/26 18:42:35 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/11 20:08:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "state_cleanup.h"
+#include "builtin.h"
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
 #include <stdlib.h>
 
-#include "dynamic/vector.h"
 #include "dynamic/string.h"
-#include "env_destroy.h"
-#include "vcmd_destroy.h"
+#include "builtin_echo.h"
+#include "builtin_exit.h"
+#include "builtin_export.h"
+#include "builtin_env.h"
 
-uint8_t	state_cleanup(t_data *_Nonnull data)
+#include "e_builtin.h"
+
+uint8_t	builtin(t_data *_Nonnull data, t_cmd cmd, t_builtin type)
 {
 	if (data == NULL)
 		return (EXIT_FAILURE);
 
-	vstr_destroy(data->arg);
-	vstr_destroy(data->redir);
-	vcmd_destroy(data->cmd);
-
-	data->arg = NULL;
-	data->redir = NULL;
-	data->cmd = NULL;
-	data->exit_code = EXIT_SUCCESS;
+	(void)cmd;
+	if (type == BUILTIN_NONE)
+		return (EXIT_SUCCESS);
+	if (type == BUILTIN_EXIT)
+		return (builtin_exit(data));
+	if (type == BUILTIN_ECHO)
+		return (builtin_echo(data, cmd));
+	if (type == BUILTIN_EXPORT)
+		return (builtin_export(data, cmd));
+	if (type == BUILTIN_ENV)
+		return (builtin_env(data, cmd));
 
 	return (EXIT_SUCCESS);
 }

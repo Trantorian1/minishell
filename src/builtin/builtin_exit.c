@@ -1,40 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   8_cleanup.c                                        :+:      :+:    :+:   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 17:43:44 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 17:40:27 by marvin           ###   ########.fr       */
+/*   Created: 2023/10/26 19:10:37 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/11 18:29:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "state_cleanup.h"
+#include "builtin_exit.h"
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <readline/readline.h>
 
 #include "dynamic/vector.h"
-#include "dynamic/string.h"
+#include "state_cleanup.h"
 #include "env_destroy.h"
-#include "vcmd_destroy.h"
 
-uint8_t	state_cleanup(t_data *_Nonnull data)
+uint8_t	builtin_exit(t_data *_Nonnull data)
 {
 	if (data == NULL)
 		return (EXIT_FAILURE);
+	
+	data->should_exit = true;
+	state_cleanup(data);
+	vstr_destroy(data->user_input);
+	env_destroy(data->env);
+	rl_clear_history();
 
-	vstr_destroy(data->arg);
-	vstr_destroy(data->redir);
-	vcmd_destroy(data->cmd);
-
-	data->arg = NULL;
-	data->redir = NULL;
-	data->cmd = NULL;
-	data->exit_code = EXIT_SUCCESS;
-
-	return (EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 08:15:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/25 17:47:21 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/11 17:38:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef struct s_data
 	t_vptr *_Nonnull	redir;
 	t_vptr *_Nonnull	env;
 	t_vptr *_Nonnull	cmd;
-	uint8_t				exit;
+	uint8_t				exit_code;
+	uint8_t				should_exit;
 }	t_data;
 
 #endif // !S_DATA_H

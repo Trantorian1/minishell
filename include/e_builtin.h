@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   s_cmd.h                                            :+:      :+:    :+:   */
+/*   e_builtin.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 01:01:34 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/26 16:58:42 by marvin           ###   ########.fr       */
+/*   Created: 2023/10/26 18:27:31 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/11 20:05:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef S_CMD_H
-# define S_CMD_H
+#ifndef E_BUILTIN_H
+# define E_BUILTIN_H
 
-# include "dynamic/string.h"
-
-typedef struct s_cmd
+typedef enum e_builtin
 {
-	t_cstr	*arg;
-	t_vptr	*redir;
-}	t_cmd;
+	BUILTIN_NONE,
+	BUILTIN_EXIT,
+	BUILTIN_ECHO,
+	BUILTIN_EXPORT,
+	BUILTIN_ENV,
+	E_BUILTIN_SIZE
+}	t_builtin;
 
 #endif

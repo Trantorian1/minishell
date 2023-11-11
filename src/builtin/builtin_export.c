@@ -1,40 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   8_cleanup.c                                        :+:      :+:    :+:   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 17:43:44 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 17:40:27 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/11 19:01:05 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/11 19:53:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "state_cleanup.h"
+#include "builtin_export.h"
 
-#include <stdbool.h>
-#include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include "env_update.h"
 
-#include "dynamic/vector.h"
-#include "dynamic/string.h"
-#include "env_destroy.h"
-#include "vcmd_destroy.h"
-
-uint8_t	state_cleanup(t_data *_Nonnull data)
+uint8_t	builtin_export(t_data *_Nonnull data, t_cmd cmd)
 {
+	size_t	index;
+
 	if (data == NULL)
 		return (EXIT_FAILURE);
 
-	vstr_destroy(data->arg);
-	vstr_destroy(data->redir);
-	vcmd_destroy(data->cmd);
+	index = 1;
+	if (cmd.arg[1] == NULL)
+		// TODO: implement env
+		return (EXIT_SUCCESS);
+		
+	while (cmd.arg[index] != NULL)
+	{
+		env_update(data->env, cmd.arg[index]);
+		index++;
+	}
 
-	data->arg = NULL;
-	data->redir = NULL;
-	data->cmd = NULL;
-	data->exit_code = EXIT_SUCCESS;
-
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }

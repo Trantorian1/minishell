@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   s_cmd.h                                            :+:      :+:    :+:   */
+/*   safe_exec.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 01:01:34 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/26 16:58:42 by marvin           ###   ########.fr       */
+/*   Created: 2023/10/26 17:17:39 by marvin            #+#    #+#             */
+/*   Updated: 2023/10/26 19:21:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef S_CMD_H
-# define S_CMD_H
+#ifndef SAFE_EXEC_H
+# define SAFE_EXEC_H
 
+# include <stdint.h>
 # include "dynamic/string.h"
 
-typedef struct s_cmd
-{
-	t_cstr	*arg;
-	t_vptr	*redir;
-}	t_cmd;
+# include "s_data.h"
+# include "s_cmd.h"
+
+uint8_t	safe_exec(t_data *_Nonnull data, t_cmd cmd);
 
 #endif

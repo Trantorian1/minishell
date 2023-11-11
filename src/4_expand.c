@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 19:39:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/25 18:05:19 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/11 20:25:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,19 @@
 #include "env_get.h"
 #include "d_str.h"
 
-static uint8_t	expand_impld(t_vptr *_Nonnull vptr);
+static uint8_t	expand_impl(t_vptr *_Nonnull vptr, t_vptr *_Nonnull env);
 
 uint8_t	state_expand(t_data *_Nonnull data)
 {
 	if (data == NULL)
 		return (EXIT_FAILURE);
 
-	if (expand_impld(data->arg) || expand_impld(data->redir))
+	if (
+		expand_impl(data->arg, data->env) 
+		|| expand_impl(data->redir, data->env)
+	) {
 		return (EXIT_FAILURE);
+	}
 
 	return (EXIT_SUCCESS);
 }
@@ -55,9 +59,6 @@ static uint8_t	expand_string(t_str *_Nonnull str, t_vptr *_Nonnull env)
 		return (EXIT_SUCCESS);
 
 	i_curr = i_prev + 1;
-	if (!is_letter(str->get[i_curr]) && !is_digit(str->get[i_curr]))
-		return (EXIT_FAILURE);
-	i_curr++;
 
 	while (is_legal_var_char(str->get[i_curr]))
 		i_curr++;
@@ -68,7 +69,8 @@ static uint8_t	expand_string(t_str *_Nonnull str, t_vptr *_Nonnull env)
 
 	return (EXIT_SUCCESS);
 }
-static uint8_t	expand_impld(t_vptr *_Nonnull vptr)
+
+static uint8_t	expand_impl(t_vptr *_Nonnull vptr, t_vptr *_Nonnull env)
 {
 	size_t	index;
 	t_str	*str;
@@ -85,7 +87,7 @@ static uint8_t	expand_impld(t_vptr *_Nonnull vptr)
 			index += 2;
 		else
 		{
-			if (expand_string(str, vptr))
+			if (expand_string(str, env))
 				return (EXIT_FAILURE);
 			index++;
 		}

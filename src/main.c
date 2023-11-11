@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/24 22:29:35 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/11 19:12:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,66 @@
 #include <stdbool.h>
 
 #include "state_parse.h"
+#include "state_tokenise.h"
+#include "state_heredoc.h"
+#include "state_expand.h"
+#include "state_unquote.h"
+#include "state_collect.h"
+#include "state_exec.h"
+#include "state_cleanup.h"
+
+#include "env_destroy.h"
 #include "env_create.h"
+
 #include "s_data.h"
 
-static t_data	g_data = {
-	.error_code  = EXIT_SUCCESS,
-	.exit        = false,
-	.index_line  = 0,
-	.user_input  = NULL,
-	.arg         = NULL,
-	.redir       = NULL,
-};
+static inline void	reset(t_data *_Nonnull data);
 
 int32_t		main(int32_t argc, t_cstr *argv, t_cstr *envp)
 {
+	static t_data data = {
+		.exit_code   = EXIT_SUCCESS,
+		.should_exit = false,
+		.index_line  = 0,
+		.user_input  = NULL,
+		.arg         = NULL,
+		.redir       = NULL,
+	};
+
 	(void)argc;
 	(void)argv;
 
-	g_data.env = (t_vptr *_Nonnull)env_create(envp);
+	data.env = (t_vptr *_Nonnull)env_create(envp);
 
-	while (!g_data.exit)
+	while (!data.should_exit)
 	{
-		if (state_parse(&g_data) == EXIT_FAILURE)
-			continue ;
-		vstr_destroy(g_data.user_input);
+		state_parse(&data);
+		while (data.index_line < data.user_input->len)
+		{
+			state_tokenise(&data);
+			state_heredoc(&data);
+			state_expand(&data);
+			state_unquote(&data);
+			state_collect(&data);
+			state_exec(&data);
+			state_cleanup(&data);
+		}
+		reset(&data);
 	}
+	state_cleanup(&data);
+	env_destroy(data.env);
+	reset(&data);
+
 	rl_clear_history();
 
 	return (EXIT_SUCCESS);
+}
+
+static inline void	reset(t_data *_Nonnull data)
+{
+	if (data == NULL)
+		return ;
+
+	vstr_destroy(data->user_input);
+	data->index_line = 0;
 }

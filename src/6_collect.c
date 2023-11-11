@@ -6,10 +6,12 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 01:00:05 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/25 16:57:57 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 19:28:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "builtin_get.h"
+#include "e_builtin.h"
 #include "state_collect.h"
 
 #include <stddef.h>
@@ -74,8 +76,12 @@ static uint8_t	collect_arg(t_data *_Nonnull data)
 	if (data == NULL)
 		return (EXIT_FAILURE);
 
-	exec = get_exec_path(data->env, vptr_get(t_str, data->arg, 0).get);
-	vstr_replace(data->arg, exec, 0);
+	exec = vptr_get(t_str, data->arg, 0);
+	if (builtin_get(exec.get) == BUILTIN_NONE)
+	{
+		exec = get_exec_path(data->env, exec.get);
+		vstr_replace(data->arg, exec, 0);
+	}
 
 	i_prev = 0;
 	i_curr = 0;
@@ -87,8 +93,12 @@ static uint8_t	collect_arg(t_data *_Nonnull data)
 			vptr_append(data->cmd, &cmd);
 			i_prev = i_curr + 1;
 
-			exec = get_exec_path(data->env, vptr_get(t_str, data->arg, i_prev).get);
-			vstr_replace(data->arg, exec, i_prev);
+			exec = vptr_get(t_str, data->arg, i_prev);
+			if (builtin_get(exec.get) == BUILTIN_NONE)
+			{
+				exec = get_exec_path(data->env, exec.get);
+				vstr_replace(data->arg, exec, i_prev);
+			}
 		}
 		i_curr++;
 	}
@@ -100,28 +110,29 @@ static uint8_t	collect_arg(t_data *_Nonnull data)
 
 static uint8_t	collect_redir(t_data *_Nonnull data)
 {
-	size_t	i_prev;
 	size_t	i_curr;
 	t_cmd	*cmd;
+	t_str	str;
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
 
-	i_prev = 0;
 	i_curr = 0;
 	cmd = vptr_get_ptr(t_cmd, data->cmd, 0);
+	cmd->redir = vptr_create(t_str, 0);
 
 	while (i_curr < data->redir->len)
 	{
-		if (str_eq(vptr_get(t_str, data->redir, i_curr), PIPE))
+		str = vptr_get(t_str, data->redir, i_curr);
+		if (str_eq(str, PIPE))
 		{
-			cmd->redir = collect(data->redir, i_prev);
 			cmd++;
-			i_prev = i_curr + 1;
+			cmd->redir = vptr_create(t_str, 0);
 		}
+		else
+			vstr_append(cmd->redir, str_create(str.get));
 		i_curr++;
 	}
-	cmd->redir = collect(data->redir, i_prev);
 
 	return (EXIT_SUCCESS);
 }
