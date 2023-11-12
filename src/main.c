@@ -6,11 +6,12 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 19:12:27 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 12:34:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>

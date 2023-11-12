@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 17:19:07 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 17:42:13 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 12:08:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,13 @@ uint8_t	safe_exec(t_data *_Nonnull data, t_cmd cmd)
 
 	builtin_type = builtin_get(cmd.arg[0]);
 
+	// TODO: use execve !!!
 	if (builtin_type != BUILTIN_NONE)
 		return (builtin(data, cmd, builtin_type));
 	else
 		execv(cmd.arg[0], cmd.arg);
 
 	safe_free_all();
-	perror("Could not find command");
+	perror(cmd.arg[0]);
 	exit(EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:51:57 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 22:22:29 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 11:57:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,9 @@ uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd)
 	if (data == NULL)
 		return (EXIT_FAILURE);
 	
+	home = env_get(data->env, "HOME");
 	if (cmd.arg[1] == NULL)
 	{
-		home = env_get(data->env, "HOME");
-
 		if (str_eq(home, ""))
 			return (cd_no_home());
 		else
@@ -52,7 +51,7 @@ uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd)
 	}
 	else if (cmd.arg[2] == NULL)
 	{
-		if (cmd.arg[1][1] == '~')
+		if (cmd.arg[1][0] == '~')
 			return (cd_relative(cmd.arg[1], home.get, data->env));
 		else
 			return (cd_to(cmd.arg[1], data->env));
@@ -62,16 +61,13 @@ uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd)
 	return (EXIT_FAILURE);
 }
 
-static void	update_env(t_vptr *_Nonnull env, t_cstr newpwd)
-{
-	char	oldpwd[2048];
+static void	update_env(
+	t_vptr *_Nonnull env, 
+	t_cstr _Nonnull oldpwd, 
+	t_cstr _Nonnull newpwd
+) {
 	t_str	pair_pwd;
 
-	if (getcwd(oldpwd, 2048) == NULL)
-	{
-		perror("getcwd");
-		return ;
-	}
 	pair_pwd = str_create("");
 
 	str_append_str(&pair_pwd, "OLDPWD=");
@@ -95,16 +91,31 @@ static uint8_t	cd_no_home(void)
 
 static uint8_t	cd_to(t_cstr _Nonnull dst, t_vptr *_Nonnull env)
 {
+	char	oldpwd[2048];
+	char	newpwd[2048];
+
 	if (dst == NULL || env == NULL)
 		return (EXIT_FAILURE);
 
-	// TODO: update must be done only if command suceeds
-	update_env(env, dst);
+	if (getcwd(oldpwd, 2048) == NULL)
+	{
+		perror("getcwd");
+		return (EXIT_FAILURE);
+	}
+
 	if (chdir(dst) < 0)
 	{
 		perror("chdir");
 		return (EXIT_FAILURE);
 	}
+	
+	if (getcwd(newpwd, 2048) == NULL)
+	{
+		perror("getcwd");
+		return (EXIT_FAILURE);
+	}
+
+	update_env(env, oldpwd, newpwd);
 
 	return (EXIT_SUCCESS);
 }
@@ -121,7 +132,7 @@ static uint8_t	cd_relative(
 
 	absolute = str_create(home);
 	str_append_str(&absolute, "/");
-	str_append_str(&absolute, dst);
+	str_append_str(&absolute, dst + 1);
 	cd_to(absolute.get, env);
 
 	str_destroy(&absolute);
