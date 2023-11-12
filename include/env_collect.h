@@ -1,33 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   safe_fork.c                                        :+:      :+:    :+:   */
+/*   env_collect.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 03:14:27 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 13:59:43 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/12 12:43:50 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/12 12:58:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "safe_fork.h"
+#ifndef ENV_COLLECT_H
+# define ENV_COLLECT_H
 
-#include <unistd.h>
-#include <stdlib.h>
+# include "dynamic/vector.h"
+# include "dynamic/string.h"
 
-#include "dynamic/alloc.h"
-#include "safe_exit.h"
+t_cstr _Nonnull *_Nullable	env_collect(t_vptr *_Nonnull env);
 
-pid_t	safe_fork(void)
-{
-	pid_t	fid;
-
-	fid = fork();
-	if (fid == -1)
-	{
-		safe_free_all();
-		safe_exit(EXIT_FAILURE);
-	}
-
-	return (fid);
-}
+#endif

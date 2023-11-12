@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:39:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 12:38:07 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 14:17:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ uint8_t	state_heredoc(t_data *_Nonnull data)
 
 			content = heredoc_content(data, data->redir, delimiter, index);
 			vstr_insert(data->redir, content, index);
+			str_destroy(&delimiter);
 
 			index++;
 		}
@@ -84,7 +85,7 @@ static t_str	delimiter_get(
 		if (!str_eq(str_curr, QUOTE_DOUBLE) && !str_eq(str_curr, QUOTE_SINGLE))
 			str_append_str(&delimiter, str_curr.get);
 
-		vptr_rm(redir, i_curr);
+		vstr_rm(redir, i_curr);
 		str_curr = vptr_get(t_str, redir, i_curr);
 	}
 
@@ -99,6 +100,7 @@ static t_str	heredoc_content(
 ) {
 	t_str	content;
 	t_str	line;
+	t_vptr	*input;
 
 	if (redir == NULL || i_curr >= redir->len)
 		return (str_create(""));
@@ -107,12 +109,16 @@ static t_str	heredoc_content(
 
 	do {
 		if (data->index_line == data->user_input->len)
-			vptr_join(data->user_input, (t_vptr *_Nonnull)input_get("> "));
+		{
+			input = input_get("> ");
+			vptr_join(data->user_input, input);
+			vptr_destroy(input);
+		}
 		line = vptr_get(t_str, data->user_input, data->index_line);
 
 		if (str_eq(line, delimiter.get))
 		{
-			vptr_rm(data->user_input, data->index_line);
+			vstr_rm(data->user_input, data->index_line);
 			break ;
 		}
 		else

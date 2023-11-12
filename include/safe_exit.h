@@ -1,33 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   safe_fork.c                                        :+:      :+:    :+:   */
+/*   safe_exit.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 03:14:27 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 13:59:43 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/12 13:51:16 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/12 13:54:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "safe_fork.h"
+#ifndef SAFE_EXIT_H
+# define SAFE_EXIT_H
 
-#include <unistd.h>
-#include <stdlib.h>
+# include <stdint.h>
 
-#include "dynamic/alloc.h"
-#include "safe_exit.h"
+_Noreturn void	safe_exit(uint8_t error);
 
-pid_t	safe_fork(void)
-{
-	pid_t	fid;
-
-	fid = fork();
-	if (fid == -1)
-	{
-		safe_free_all();
-		safe_exit(EXIT_FAILURE);
-	}
-
-	return (fid);
-}
+#endif

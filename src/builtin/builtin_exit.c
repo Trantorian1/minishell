@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 19:10:37 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 18:29:14 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 14:01:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <readline/readline.h>
 
 #include "dynamic/vector.h"
+#include "safe_exit.h"
 #include "state_cleanup.h"
 #include "env_destroy.h"
 
@@ -31,5 +32,6 @@ uint8_t	builtin_exit(t_data *_Nonnull data)
 	env_destroy(data->env);
 	rl_clear_history();
 
+	// TODO: replace this with safe_exit (only for testing purposes rn)
 	exit(EXIT_SUCCESS);
 }

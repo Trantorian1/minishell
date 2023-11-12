@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 17:19:07 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 12:08:57 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 13:58:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@
 #include "dynamic/alloc.h"
 #include "builtin_get.h"
 #include "builtin.h"
+#include "env_collect.h"
 
 #include "e_builtin.h"
+#include "safe_exit.h"
 
 uint8_t	safe_exec(t_data *_Nonnull data, t_cmd cmd)
 {
@@ -34,13 +36,12 @@ uint8_t	safe_exec(t_data *_Nonnull data, t_cmd cmd)
 
 	builtin_type = builtin_get(cmd.arg[0]);
 
-	// TODO: use execve !!!
 	if (builtin_type != BUILTIN_NONE)
 		return (builtin(data, cmd, builtin_type));
 	else
-		execv(cmd.arg[0], cmd.arg);
+		execve(cmd.arg[0], cmd.arg, env_collect(data->env));
 
 	safe_free_all();
 	perror(cmd.arg[0]);
-	exit(EXIT_FAILURE);
+	safe_exit(EXIT_FAILURE);
 }

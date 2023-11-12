@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 12:34:54 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 13:49:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "dynamic/alloc.h"
+#include "env_collect.h"
 #include "state_parse.h"
 #include "state_tokenise.h"
 #include "state_heredoc.h"
@@ -64,6 +66,7 @@ int32_t		main(int32_t argc, t_cstr *argv, t_cstr *envp)
 		}
 		reset(&data);
 	}
+	rl_clear_history();
 	state_cleanup(&data);
 	env_destroy(data.env);
 	reset(&data);

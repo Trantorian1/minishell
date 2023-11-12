@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 15:56:15 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/16 15:57:26 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 13:49:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <stdlib.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 
 #include "dynamic/vector.h"
 #include "dynamic/string.h"
@@ -30,6 +31,7 @@ t_vptr *_Nullable	input_get(char *_Nonnull prompt)
 
 	// user input is split at every newline
 	tmp = readline(prompt);
+	add_history(tmp);
 	if (tmp == NULL)
 		return (NULL);
 

@@ -6,12 +6,13 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 18:28:41 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 13:54:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin_get.h"
 #include "e_builtin.h"
+#include "safe_exit.h"
 #include "state_exec.h"
 
 #include <stddef.h>
@@ -217,12 +218,11 @@ static uint8_t	child(
 	safe_close(pipe_id[PIPE_WRITE]);
 
 	if (redir(cmd) == EXIT_FAILURE)
-		exit(EXIT_FAILURE);
+		safe_exit(EXIT_FAILURE);
 
-	if (safe_exec(data, cmd) != EXIT_FAILURE)
-		exit(EXIT_SUCCESS);
+	if (safe_exec(data, cmd) == EXIT_SUCCESS)
+		safe_exit(EXIT_SUCCESS);
 
 	safe_free_all();
-	perror("command not found");
-	exit(EXIT_FAILURE);
+	safe_exit(EXIT_FAILURE);
 }

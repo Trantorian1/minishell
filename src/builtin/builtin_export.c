@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 19:01:05 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 19:53:39 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 13:32:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+
 #include "env_update.h"
+#include "builtin_env.h"
 
 uint8_t	builtin_export(t_data *_Nonnull data, t_cmd cmd)
 {
@@ -25,14 +27,16 @@ uint8_t	builtin_export(t_data *_Nonnull data, t_cmd cmd)
 
 	index = 1;
 	if (cmd.arg[1] == NULL)
-		// TODO: implement env
+	{
+		builtin_env(data, cmd);
 		return (EXIT_SUCCESS);
-		
+	}
+
 	while (cmd.arg[index] != NULL)
 	{
 		env_update(data->env, cmd.arg[index]);
 		index++;
 	}
 
-	return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
