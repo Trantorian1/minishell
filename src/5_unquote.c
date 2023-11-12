@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 22:44:23 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/25 18:47:04 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 14:29:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ static uint8_t	unquote_impl(t_vptr *_Nonnull vstr)
 		str = vptr_get(t_str, vstr, index);
 		if (str_eq(str, QUOTE_SINGLE) || str_eq(str, QUOTE_DOUBLE))
 			vstr_unquote(vstr, index);
+
+		str = vptr_get(t_str, vstr, index);
 		if (str_eq(str, WHITESPACE))
 			vstr_rm(vstr, index);
 		else
