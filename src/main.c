@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 16:23:03 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 17:10:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int32_t		main(int32_t argc, t_cstr *argv, t_cstr *envp)
 			break ;
 		while (data.index_line < data.user_input->len)
 		{
-			state_tokenise(&data);
+			if (state_tokenise(&data))
+				break ;
 			state_heredoc(&data);
 			state_expand(&data);
 			state_unquote(&data);

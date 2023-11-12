@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 16:41:32 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 16:53:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ static int32_t	fork_commands(t_data *_Nonnull data)
 		// child
 		if (pid == 0)
 		{
-			if (index != 0)
+			if (index != data->cmd->len - 1)
 				safe_close(pipe_id[PIPE_READ]);
 			child(data, index, read_fd, pipe_id[PIPE_WRITE]);
 		}
@@ -233,8 +233,8 @@ static uint8_t	child(
 	}
 
 	// applies redirections
-	// if (redir(cmd) == EXIT_FAILURE)
-	// 	safe_exit(EXIT_FAILURE);
+	if (redir(cmd) == EXIT_FAILURE)
+		safe_exit(EXIT_FAILURE);
 
 	// exectute command
 	safe_exit(safe_exec(data, cmd) == EXIT_SUCCESS);
