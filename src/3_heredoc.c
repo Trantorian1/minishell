@@ -6,10 +6,11 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:39:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 14:17:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 22:26:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "error_display.h"
 #include "state_heredoc.h"
 
 #include <stdio.h>
@@ -111,6 +112,17 @@ static t_str	heredoc_content(
 		if (data->index_line == data->user_input->len)
 		{
 			input = input_get("> ");
+			if (input == NULL)
+			{
+				error_display("heredoc", "eof encountered");
+				return (content);
+			}
+			if (input->len == 0)
+			{
+				str_append_char(&content, '\n');
+				vptr_destroy(input);
+				continue ;
+			}
 			vptr_join(data->user_input, input);
 			vptr_destroy(input);
 		}
