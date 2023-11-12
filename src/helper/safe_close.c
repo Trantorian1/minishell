@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:43:24 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 16:51:33 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 21:02:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 int32_t	safe_close(int32_t fd)
 {
-	if (fd == STDIN_FILENO || fd == STDERR_FILENO)
+	if (fd == STDIN_FILENO || fd == STDERR_FILENO || fd == STDOUT_FILENO)
 		return (EXIT_SUCCESS);
 
 	if (close(fd) == 0)

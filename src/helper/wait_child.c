@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 15:06:26 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 15:16:04 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 20:24:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@
 
 static int32_t	decode_status(int32_t);
 
-int32_t	wait_child(pid_t pid_last)
+uint8_t	wait_child(pid_t pid_last)
 {
 	pid_t	pid;
 	int32_t	status;
-	int32_t	status_last;
+	uint8_t	status_last;
 
 	status_last = EXIT_SUCCESS;
 	while (true)
@@ -35,7 +35,7 @@ int32_t	wait_child(pid_t pid_last)
 		if (pid < 0)
 			break ;
 		else if (pid == pid_last)
-			status_last = decode_status(status);
+			status_last = (uint8_t)decode_status(status);
 	}
 
 	return (status_last);

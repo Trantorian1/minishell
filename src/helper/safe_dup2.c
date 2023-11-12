@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:40:40 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 13:57:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 21:02:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 int32_t	safe_dup2(int32_t oldfd, int32_t newfd)
 {
 	int32_t	fd;
+	if (oldfd == newfd)
+		return (EXIT_SUCCESS);
 
 	fd = dup2(oldfd, newfd);
 	if (fd != -1)

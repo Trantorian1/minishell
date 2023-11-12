@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 16:53:14 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 21:34:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,13 @@
 #define PIPE_WRITE 1
 
 #define F_IN O_RDONLY | O_CREAT
-#define F_OUT O_WRONLY | O_CREAT
+#define F_OUT O_WRONLY | O_CREAT | O_TRUNC
 #define F_APPEND O_WRONLY | O_APPEND | O_CREAT
 
-static int32_t	check_for_builtin(
-	t_data *_Nonnull data
-);
-static int32_t	fork_commands(
-	t_data *_Nonnull data
-);
-static uint8_t	child(
-	t_data *_Nonnull data,
-	size_t index,
-	int32_t read_fd,
-	int32_t write_fd
-);
+static uint8_t	check_for_builtin(t_data *_Nonnull data);
+static uint8_t	fork_commands(t_data *_Nonnull data);
+static uint8_t	redir(t_cmd cmd, int32_t pipes[2]);
+static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2]);
 
 uint8_t	state_exec(t_data *_Nonnull data)
 {
@@ -66,28 +58,34 @@ uint8_t	state_exec(t_data *_Nonnull data)
 		return (EXIT_FAILURE);
 
 	if (data->cmd->len == 1)
-		check_for_builtin(data);
+		data->exit_code = check_for_builtin(data);
 	else
-		fork_commands(data);
+		data->exit_code = fork_commands(data);
 
 	return (EXIT_SUCCESS);
 }
 
-static int32_t	check_for_builtin(t_data *_Nonnull data)
+static uint8_t	check_for_builtin(t_data *_Nonnull data)
 {
 	t_cmd		cmd;
 	t_builtin	builtin_type;
+	int32_t		redirs[2];
 
 	cmd = vptr_get(t_cmd, data->cmd, 0);
 	builtin_type = builtin_get(cmd.arg[0]);
 
 	if (builtin_type != BUILTIN_NONE)
+	{
+		redirs[0] = STDIN_FILENO;
+		redirs[1] = STDOUT_FILENO;
+		redir(cmd, redirs);
 		return (builtin(data, cmd, builtin_type));
+	}
 	else
 		return (fork_commands(data));
 }
 
-static int32_t	fork_commands(t_data *_Nonnull data)
+static uint8_t	fork_commands(t_data *_Nonnull data)
 {
 	size_t	index;
 	int32_t	read_fd;
@@ -111,7 +109,7 @@ static int32_t	fork_commands(t_data *_Nonnull data)
 		{
 			if (index != data->cmd->len - 1)
 				safe_close(pipe_id[PIPE_READ]);
-			child(data, index, read_fd, pipe_id[PIPE_WRITE]);
+			child(data, index, (int32_t []){read_fd, pipe_id[PIPE_WRITE]});
 		}
 
 		// parent
@@ -130,46 +128,58 @@ static int32_t	fork_commands(t_data *_Nonnull data)
 	return (wait_child(pid));
 }
 
-static uint8_t	redir_heredoc(t_str content)
-{
+static uint8_t	redir_heredoc(
+	t_str content,
+	int32_t pipes[2]
+) {
 	int32_t	pipe_id[2];
 
 	safe_pipe(pipe_id);
 
-	if (write(pipe_id[PIPE_WRITE], content.get, content.len) == -1)
+	if (write(pipe_id[PIPE_WRITE], content.get, content.len) < 0)
 	{
 		perror("could not write to heredoc");
 		return (EXIT_FAILURE);
 	}
 
-	safe_dup2(pipe_id[PIPE_READ], STDIN_FILENO);
-	safe_close(pipe_id[PIPE_READ]);
+	safe_close(pipes[PIPE_READ]);
+	pipes[PIPE_READ] = pipe_id[PIPE_READ];
 	safe_close(pipe_id[PIPE_WRITE]);
 
 	return (EXIT_SUCCESS);
 }
 
-static uint8_t	redir_file(t_str file, int32_t flags, int32_t stream)
-{
+static uint8_t	redir_file(
+	t_str file, 
+	int32_t flags, 
+	int32_t	pipes[2]
+) {
 	int32_t	fd;
 
-	if (stream < 0)
-		return (EXIT_FAILURE);
-
-	fd = open(file.get, flags, S_IRUSR | S_IWUSR);
-	if (fd == - 1)
+	fd = open(file.get, flags, S_IWUSR | S_IRUSR);
+	if (flags == (F_IN))
 	{
-		perror("could not open file");
+		safe_close(pipes[PIPE_READ]);
+		pipes[PIPE_READ] = fd;
+	}
+	else
+	{
+		safe_close(pipes[PIPE_WRITE]);
+		pipes[PIPE_WRITE] = fd;
+	}
+	if (fd < 0)
+	{
+		perror(file.get);
+		if (flags == (F_IN))
+			safe_close(pipes[PIPE_WRITE]);
+		else
+			safe_close(pipes[PIPE_READ]);
 		return (EXIT_FAILURE);
 	}
-
-	safe_dup2(fd, stream);
-	safe_close(fd);
-
 	return (EXIT_SUCCESS);
 }
 
-static uint8_t	redir(t_cmd cmd)
+static uint8_t	redir(t_cmd cmd, int32_t pipes[2])
 {
 	size_t	index;
 	t_str	*redir;
@@ -181,21 +191,21 @@ static uint8_t	redir(t_cmd cmd)
 		redir = vptr_get_ptr(t_str, cmd.redir, index);
 		content = *(redir + 1);
 
-		if (str_eq(*redir, REDIR_HEREDOC) && redir_heredoc(content))
+		if (str_eq(*redir, REDIR_HEREDOC) && redir_heredoc(content, pipes))
 			return (EXIT_FAILURE);
 		else if (str_eq(*redir, REDIR_IN))
 		{
-			if (redir_file(content, F_IN, STDIN_FILENO))
+			if (redir_file(content, F_IN, pipes))
 				return (EXIT_FAILURE);
 		}
 		else if (str_eq(*redir, REDIR_APPEND))
 		{
-			if (redir_file(content, F_APPEND, STDOUT_FILENO))
+			if (redir_file(content, F_APPEND, pipes))
 				return (EXIT_FAILURE);
 		}
 		else if (str_eq(*redir, REDIR_OUT))
 		{
-			if (redir_file(content, F_OUT, STDOUT_FILENO))
+			if (redir_file(content, F_OUT, pipes))
 				return (EXIT_FAILURE);
 		}
 
@@ -205,37 +215,34 @@ static uint8_t	redir(t_cmd cmd)
 	return (EXIT_SUCCESS);
 }
 
-static uint8_t	child(
-	t_data *_Nonnull data,
-	size_t index,
-	int32_t fd_read,
-	int32_t fd_write
-) {
+static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2])
+{
 	t_cmd	cmd;
+	int32_t	fd_in;
+	int32_t	fd_out;
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
 
 	cmd = vptr_get(t_cmd, data->cmd, index);
 
-	// don't dup STDIN of first pipe
-	if (index != 0)
-	{
-		safe_dup2(fd_read, STDIN_FILENO);
-		safe_close(fd_read);
-	}
-
-	// don't dup STDOUT of last pipe
-	if (index != data->cmd->len - 1)
-	{
-		safe_dup2(fd_write, STDOUT_FILENO);
-		safe_close(fd_write);
-	}
-
-	// applies redirections
-	if (redir(cmd) == EXIT_FAILURE)
+	fd_in = redirs[PIPE_READ];
+	fd_out = redirs[PIPE_WRITE];
+	if (redir(cmd, redirs))
 		safe_exit(EXIT_FAILURE);
 
+	if (index != 0 || fd_in != redirs[PIPE_READ])
+	{
+		safe_dup2(redirs[PIPE_READ], STDIN_FILENO);
+		safe_close(redirs[PIPE_READ]);
+	}
+
+	if (index != data->cmd->len - 1 || fd_out != redirs[PIPE_WRITE])
+	{
+		safe_dup2(redirs[PIPE_WRITE], STDOUT_FILENO);
+		safe_close(redirs[PIPE_WRITE]);
+	}
+
 	// exectute command
-	safe_exit(safe_exec(data, cmd) == EXIT_SUCCESS);
+	safe_exit(safe_exec(data, cmd));
 }
