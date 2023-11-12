@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 13:49:38 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 16:23:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int32_t		main(int32_t argc, t_cstr *argv, t_cstr *envp)
 
 	while (!data.should_exit)
 	{
-		state_parse(&data);
+		if (state_parse(&data) == EXIT_FAILURE)
+			break ;
 		while (data.index_line < data.user_input->len)
 		{
 			state_tokenise(&data);
@@ -82,5 +83,6 @@ static inline void	reset(t_data *_Nonnull data)
 		return ;
 
 	vstr_destroy(data->user_input);
+	data->user_input = NULL;
 	data->index_line = 0;
 }

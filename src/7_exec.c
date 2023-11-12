@@ -6,10 +6,11 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 13:54:52 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 16:41:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "builtin.h"
 #include "builtin_get.h"
 #include "e_builtin.h"
 #include "safe_exit.h"
@@ -37,6 +38,7 @@
 
 #include "s_cmd.h"
 #include "d_str.h"
+#include "wait_child.h"
 
 #define PIPE_READ 0
 #define PIPE_WRITE 1
@@ -45,17 +47,17 @@
 #define F_OUT O_WRONLY | O_CREAT
 #define F_APPEND O_WRONLY | O_APPEND | O_CREAT
 
-static void	check_for_builtin(
+static int32_t	check_for_builtin(
 	t_data *_Nonnull data
 );
-static void	fork_commands(
+static int32_t	fork_commands(
 	t_data *_Nonnull data
 );
 static uint8_t	child(
 	t_data *_Nonnull data,
 	size_t index,
 	int32_t read_fd,
-	int32_t pipe_id[2]
+	int32_t write_fd
 );
 
 uint8_t	state_exec(t_data *_Nonnull data)
@@ -71,50 +73,61 @@ uint8_t	state_exec(t_data *_Nonnull data)
 	return (EXIT_SUCCESS);
 }
 
-static void	check_for_builtin(t_data *_Nonnull data)
+static int32_t	check_for_builtin(t_data *_Nonnull data)
 {
 	t_cmd		cmd;
-	t_builtin	builtin;
+	t_builtin	builtin_type;
 
 	cmd = vptr_get(t_cmd, data->cmd, 0);
-	builtin = builtin_get(cmd.arg[0]);
+	builtin_type = builtin_get(cmd.arg[0]);
 
-	if (builtin != BUILTIN_NONE)
-		safe_exec(data, cmd);
+	if (builtin_type != BUILTIN_NONE)
+		return (builtin(data, cmd, builtin_type));
 	else
-		fork_commands(data);
+		return (fork_commands(data));
 }
 
-static void	fork_commands(t_data *_Nonnull data)
+static int32_t	fork_commands(t_data *_Nonnull data)
 {
 	size_t	index;
 	int32_t	read_fd;
 	int32_t	pipe_id[2];
+	int32_t	pid;
 
 	index = 0;
 	read_fd = STDIN_FILENO;
+	pid = 0;
 
 	while (index < data->cmd->len)
 	{
-		safe_pipe(pipe_id);
 
-		if (safe_fork() == 0)
-			child(data, index, read_fd, pipe_id);
+		if (index != data->cmd->len - 1)
+			safe_pipe(pipe_id);
+
+		pid = safe_fork();
+
+		// child
+		if (pid == 0)
+		{
+			if (index != 0)
+				safe_close(pipe_id[PIPE_READ]);
+			child(data, index, read_fd, pipe_id[PIPE_WRITE]);
+		}
+
+		// parent
 		else
 		{
 			if (index != 0)
 				safe_close(read_fd);
-
-			safe_close(pipe_id[PIPE_WRITE]);
+			if (index != data->cmd->len - 1)
+				safe_close(pipe_id[PIPE_WRITE]);
 			read_fd = pipe_id[PIPE_READ];
 		}
 
 		index++;
 	}
-	safe_close(read_fd);
 
-	while (wait(NULL) != -1 && errno != ECHILD)
-		continue ;
+	return (wait_child(pid));
 }
 
 static uint8_t	redir_heredoc(t_str content)
@@ -195,8 +208,8 @@ static uint8_t	redir(t_cmd cmd)
 static uint8_t	child(
 	t_data *_Nonnull data,
 	size_t index,
-	int32_t read_fd,
-	int32_t pipe_id[2]
+	int32_t fd_read,
+	int32_t fd_write
 ) {
 	t_cmd	cmd;
 
@@ -205,24 +218,24 @@ static uint8_t	child(
 
 	cmd = vptr_get(t_cmd, data->cmd, index);
 
+	// don't dup STDIN of first pipe
 	if (index != 0)
 	{
-		safe_dup2(read_fd, STDIN_FILENO);
-		safe_close(read_fd);
+		safe_dup2(fd_read, STDIN_FILENO);
+		safe_close(fd_read);
 	}
 
-	if (index < data->cmd->len - 1)
-		safe_dup2(pipe_id[PIPE_WRITE], STDOUT_FILENO);
+	// don't dup STDOUT of last pipe
+	if (index != data->cmd->len - 1)
+	{
+		safe_dup2(fd_write, STDOUT_FILENO);
+		safe_close(fd_write);
+	}
 
-	safe_close(pipe_id[PIPE_READ]);
-	safe_close(pipe_id[PIPE_WRITE]);
+	// applies redirections
+	// if (redir(cmd) == EXIT_FAILURE)
+	// 	safe_exit(EXIT_FAILURE);
 
-	if (redir(cmd) == EXIT_FAILURE)
-		safe_exit(EXIT_FAILURE);
-
-	if (safe_exec(data, cmd) == EXIT_SUCCESS)
-		safe_exit(EXIT_SUCCESS);
-
-	safe_free_all();
-	safe_exit(EXIT_FAILURE);
+	// exectute command
+	safe_exit(safe_exec(data, cmd) == EXIT_SUCCESS);
 }

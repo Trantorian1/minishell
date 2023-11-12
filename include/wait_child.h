@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   safe_close.c                                       :+:      :+:    :+:   */
+/*   wait_child.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 16:43:24 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 16:14:49 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/12 15:04:54 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/12 15:15:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "safe_close.h"
+#ifndef WAIT_CHILD_H
+# define WAIT_CHILD_H
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
+# include <stdint.h>
+# include <sys/types.h>
 
-#include "dynamic/alloc.h"
-#include "safe_exit.h"
+int32_t	wait_child(pid_t pid_last);
 
-int32_t	safe_close(int32_t fd)
-{
-	if (close(fd) == 0)
-		return (EXIT_SUCCESS);
-
-	perror("minishell: close");
-	safe_exit(EXIT_FAILURE);
-}
+#endif

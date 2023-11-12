@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 17:19:07 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 13:58:04 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 16:16:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ uint8_t	safe_exec(t_data *_Nonnull data, t_cmd cmd)
 	else
 		execve(cmd.arg[0], cmd.arg, env_collect(data->env));
 
-	safe_free_all();
 	perror(cmd.arg[0]);
 	safe_exit(EXIT_FAILURE);
 }

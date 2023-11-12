@@ -6,7 +6,7 @@
 #    By: emcnab <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 15:14:44 by emcnab            #+#    #+#              #
-#    Updated: 2023/11/12 14:05:11 by marvin           ###   ########.fr        #
+#    Updated: 2023/11/12 15:43:57 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ DEBUG      = -g
 C_COMPILER = clang
 I_FLAGS    = $(foreach dir,$(DIR_INCL),-I$(dir)) -I vendor
 SILENCED   = -Wno-padded -Wno-nullability-extension
-C_FLAGS    = -Wall -Wextra -Werror -Weverything $(SILENCED) $(OPT) $(DEBUG) $(I_FLAGS)
+# TODO: add back Werror !!!
+C_FLAGS    = -Wall -Wextra -Weverything $(SILENCED) $(OPT) $(DEBUG) $(I_FLAGS)
 C_DEPS     = -MM -MP $(I_FLAGS)
 
 BIN        = $(DIR_BIN)/minishell
