@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 21:34:09 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/12 21:58:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 #define PIPE_READ 0
 #define PIPE_WRITE 1
 
-#define F_IN O_RDONLY | O_CREAT
+#define F_IN O_RDONLY
 #define F_OUT O_WRONLY | O_CREAT | O_TRUNC
 #define F_APPEND O_WRONLY | O_APPEND | O_CREAT
 
@@ -89,7 +89,7 @@ static uint8_t	fork_commands(t_data *_Nonnull data)
 {
 	size_t	index;
 	int32_t	read_fd;
-	int32_t	pipe_id[2];
+	int32_t	pipe_id[2] = {STDIN_FILENO , STDOUT_FILENO};
 	int32_t	pid;
 
 	index = 0;
@@ -135,14 +135,15 @@ static uint8_t	redir_heredoc(
 	int32_t	pipe_id[2];
 
 	safe_pipe(pipe_id);
+	safe_close(pipes[PIPE_READ]);
 
 	if (write(pipe_id[PIPE_WRITE], content.get, content.len) < 0)
 	{
 		perror("could not write to heredoc");
+		safe_close(pipe_id[PIPE_WRITE]);
 		return (EXIT_FAILURE);
 	}
 
-	safe_close(pipes[PIPE_READ]);
 	pipes[PIPE_READ] = pipe_id[PIPE_READ];
 	safe_close(pipe_id[PIPE_WRITE]);
 
