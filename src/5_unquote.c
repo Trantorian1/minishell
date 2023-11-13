@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 22:44:23 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 22:15:49 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 23:25:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static uint8_t	unquote_impl(t_vptr *_Nonnull vstr)
 			index++;
 		}
 		else
-			vptr_rm(vstr, index);
+			vstr_rm(vstr, index);
 	}
 	
 	return (EXIT_SUCCESS);

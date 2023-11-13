@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 20:34:35 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 20:42:43 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 23:27:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 #include "dynamic/vector.h"
 #include "dynamic/string.h"
+#include "env_pair_destroy.h"
 
 uint8_t	env_try_delete(t_vptr *_Nonnull env, t_cstr _Nonnull key)
 {
@@ -35,6 +36,7 @@ uint8_t	env_try_delete(t_vptr *_Nonnull env, t_cstr _Nonnull key)
 		if (str_eq(pair.key, key))
 		{
 			vptr_rm(env, index);
+			env_pair_destroy(&pair);
 			return (true);
 		}
 
