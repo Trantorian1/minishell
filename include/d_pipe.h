@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.h                                      :+:      :+:    :+:   */
+/*   d_pipe.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 20:50:41 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/13 09:51:08 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/13 09:51:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_PWD_H
-# define BUILTIN_PWD_H
+#ifndef D_PIPE_H
+# define D_PIPE_H
 
-# include <stdint.h>
-# include "s_data.h"
-# include "s_cmd.h"
-
-uint8_t	builtin_pwd(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd);
+# define PIPE_READ 0
+# define PIPE_WRITE 1
 
 #endif

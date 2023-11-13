@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.h                                      :+:      :+:    :+:   */
+/*   9_reset.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 20:50:41 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/13 13:52:56 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/13 13:53:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_PWD_H
-# define BUILTIN_PWD_H
+#include "state_reset.h"
 
-# include <stdint.h>
-# include "s_data.h"
-# include "s_cmd.h"
+#include "dynamic/vector.h"
 
-uint8_t	builtin_pwd(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd);
+void	state_reset(t_data *_Nonnull data)
+{
+	if (data == NULL)
+		return ;
 
-#endif
+	vstr_destroy(data->user_input);
+	data->user_input = NULL;
+	data->index_line = 0;
+}

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 19:10:37 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 14:01:32 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,14 @@
 #include "state_cleanup.h"
 #include "env_destroy.h"
 
-uint8_t	builtin_exit(t_data *_Nonnull data)
+uint8_t	builtin_exit(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
 {
-	if (data == NULL)
+	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);
 	
+	(void)cmd;
+	(void)pipe_fd;
+
 	data->should_exit = true;
 	state_cleanup(data);
 	vstr_destroy(data->user_input);

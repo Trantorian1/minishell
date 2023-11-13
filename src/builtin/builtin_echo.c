@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:33:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 18:44:33 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@
 
 #include "dynamic/string.h"
 
-uint8_t	builtin_echo(t_data *_Nonnull data, t_cmd cmd)
+#include "d_pipe.h"
+
+uint8_t	builtin_echo(t_data *_Nonnull data, t_cmd cmd, int32_t * _Nonnull pipe_fd)
 {
 	uint8_t	option_n;
 	size_t	index;
-	size_t	len;
+	t_str	message;
 
-	if (data == NULL)
+	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);
 
 	if (cstr_eq(cmd.arg[1], "-n"))
@@ -34,19 +36,21 @@ uint8_t	builtin_echo(t_data *_Nonnull data, t_cmd cmd)
 		option_n = false;
 
 	index = 1 + option_n;
+	message = str_create("");
 
 	while (cmd.arg[index] != NULL)
 	{
-		len = cstr_len(cmd.arg[index]);
-		write(STDOUT_FILENO, cmd.arg[index], len);
-		
+		str_append_str(&message, cmd.arg[index]);
 		if (cmd.arg[index + 1] != NULL)
-			write(STDOUT_FILENO, " ", 1);
+			str_append_char(&message, ' ');
 
 		index++;
 	}
 	if (option_n == false)
-		write(STDOUT_FILENO, "\n", 1);
+		str_append_char(&message, '\n');
+
+	write(pipe_fd[PIPE_WRITE], message.get, message.len);
+	str_destroy(&message);
 
 	return (EXIT_SUCCESS);
 }

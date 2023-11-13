@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:43:44 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 17:40:27 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 13:25:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ uint8_t	state_cleanup(t_data *_Nonnull data)
 	data->arg = NULL;
 	data->redir = NULL;
 	data->cmd = NULL;
-	data->exit_code = EXIT_SUCCESS;
 
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 19:56:11 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 20:09:33 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,34 @@
 
 #include "dynamic/string.h"
 #include "dynamic/vector.h"
-#include "s_env.h"
+#include "error_display.h"
 
-uint8_t	builtin_env(t_data *_Nonnull data, t_cmd cmd)
+#include "s_env.h"
+#include "d_pipe.h"
+
+uint8_t	builtin_env(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
 {
 	size_t		index;
 	t_env_pair	pair;
+	t_str		message;
 
-	if (data == NULL)
+	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);
 
 	if (cmd.arg[1] != NULL)
-		write(STDERR_FILENO, "minishell: env: too many arguments\n", 35);
+		error_display("env", "too many arguments");
 
 	index = 0;
 	while (index < data->env->len)
 	{
 		pair = vptr_get(t_env_pair, data->env, index);
+		message = str_create(pair.key.get);
 
-		write(STDOUT_FILENO, pair.key.get, pair.key.len);
-		write(STDOUT_FILENO, "=", 1);
-		write(STDOUT_FILENO, pair.val.get, pair.val.len);
-		write(STDOUT_FILENO, "\n", 1);
+		str_append_char(&message, '=');
+		str_append_str(&message, pair.val.get);
+		str_append_char(&message, '\n');
+		write(pipe_fd[PIPE_WRITE], message.get, message.len);
+		str_destroy(&message);
 
 		index++;
 	}

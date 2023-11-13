@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 08:15:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 17:38:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 13:25:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include <stdint.h>
 # include "dynamic/vector.h"
 # include "dynamic/string.h"
-
-// TODO: pack this!!!
 
 typedef struct s_data
 {

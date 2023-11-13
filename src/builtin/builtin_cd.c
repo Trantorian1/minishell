@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:51:57 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 11:57:41 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include "dynamic/vector.h"
 #include "env_get.h"
 #include "env_update.h"
+#include "error_display.h"
 
 static uint8_t	cd_no_home(void);
 static uint8_t	cd_to(
@@ -34,11 +35,13 @@ static uint8_t	cd_relative(
 	t_vptr *_Nonnull env
 );
 
-uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd)
+uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
 {
 	t_str	home;
 
-	if (data == NULL)
+	(void)pipe_fd;
+
+	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);
 	
 	home = env_get(data->env, "HOME");
@@ -57,7 +60,7 @@ uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd)
 			return (cd_to(cmd.arg[1], data->env));
 	}
 	
-	write(STDERR_FILENO, "minishell: cd: too many arguments for cd\n", 42);
+	error_display("cd", "too many arguments");
 	return (EXIT_FAILURE);
 }
 
@@ -85,7 +88,7 @@ static void	update_env(
 
 static uint8_t	cd_no_home(void)
 {
-	write(STDERR_FILENO, "minishell: cd: HOME not set\n", 29);
+	error_display("cd", "HOME not set");
 	return (EXIT_FAILURE);
 }
 

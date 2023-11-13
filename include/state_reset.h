@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.h                                      :+:      :+:    :+:   */
+/*   state_reset.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 20:50:41 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/13 13:53:22 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/13 13:53:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_PWD_H
-# define BUILTIN_PWD_H
+#ifndef STATE_RESET_H
+# define STATE_RESET_H
 
-# include <stdint.h>
-# include "s_data.h"
-# include "s_cmd.h"
+# include <s_data.h>
 
-uint8_t	builtin_pwd(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd);
+void	state_reset(t_data *_Nonnull data);
 
 #endif

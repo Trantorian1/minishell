@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 21:58:31 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,11 @@
 #include "safe_dup2.h"
 #include "safe_close.h"
 #include "safe_exec.h"
+#include "wait_child.h"
 
 #include "s_cmd.h"
 #include "d_str.h"
-#include "wait_child.h"
-
-#define PIPE_READ 0
-#define PIPE_WRITE 1
+#include "d_pipe.h"
 
 #define F_IN O_RDONLY
 #define F_OUT O_WRONLY | O_CREAT | O_TRUNC
@@ -78,8 +76,9 @@ static uint8_t	check_for_builtin(t_data *_Nonnull data)
 	{
 		redirs[0] = STDIN_FILENO;
 		redirs[1] = STDOUT_FILENO;
-		redir(cmd, redirs);
-		return (builtin(data, cmd, builtin_type));
+		if (redir(cmd, redirs) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		return (builtin(data, cmd, builtin_type, redirs));
 	}
 	else
 		return (fork_commands(data));
@@ -229,7 +228,7 @@ static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2])
 
 	fd_in = redirs[PIPE_READ];
 	fd_out = redirs[PIPE_WRITE];
-	if (redir(cmd, redirs))
+	if (redir(cmd, redirs) == EXIT_FAILURE)
 		safe_exit(EXIT_FAILURE);
 
 	if (index != 0 || fd_in != redirs[PIPE_READ])
@@ -245,5 +244,5 @@ static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2])
 	}
 
 	// exectute command
-	safe_exit(safe_exec(data, cmd));
+	safe_exit(safe_exec(data, cmd, redirs));
 }

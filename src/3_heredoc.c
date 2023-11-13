@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:39:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 22:26:01 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,8 @@ static t_str	heredoc_content(
 
 	content = str_create("");
 
-	do {
+	while(true)
+	{
 		if (data->index_line == data->user_input->len)
 		{
 			input = input_get("> ");
@@ -139,7 +140,7 @@ static t_str	heredoc_content(
 			str_append_char(&content, '\n');
 			data->index_line++;
 		}
-	} while (true);
+	}
 
 	return (content);
 }

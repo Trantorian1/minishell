@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 17:19:07 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 20:26:53 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #include "e_builtin.h"
 #include "d_err_codes.h"
 
-uint8_t	safe_exec(t_data *_Nonnull data, t_cmd cmd)
+uint8_t	safe_exec(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
 {
 	t_builtin	builtin_type;
 
@@ -38,7 +38,7 @@ uint8_t	safe_exec(t_data *_Nonnull data, t_cmd cmd)
 	builtin_type = builtin_get(cmd.arg[0]);
 
 	if (builtin_type != BUILTIN_NONE)
-		return (builtin(data, cmd, builtin_type));
+		return (builtin(data, cmd, builtin_type, pipe_fd));
 	else
 		execve(cmd.arg[0], cmd.arg, env_collect(data->env));
 
