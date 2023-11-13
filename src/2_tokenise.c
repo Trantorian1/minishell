@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:42:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 22:05:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ static uint8_t	tokenise_redir(
 		return (error_display("redir", "invalid redirection"));
 
 	vstr_append(redir, str_substr(input, *store, *store + len));
+	vstr_append(redir, str_create(WHITESPACE));
 
 	i_curr = skip_whitespace(input, *store + len);
 	i_prev = i_curr;

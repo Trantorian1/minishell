@@ -6,12 +6,13 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:26:24 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/25 04:12:36 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 22:49:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_exec_path.h"
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -33,6 +34,7 @@ t_str	get_exec_path(t_vptr *_Nonnull env, t_cstr _Nonnull exec)
 	t_vptr		*path;
 	size_t		index;
 	t_str		file;
+	bool		found;
 
 	if (env == NULL || exec == NULL)
 		return (str_create(""));
@@ -43,6 +45,7 @@ t_str	get_exec_path(t_vptr *_Nonnull env, t_cstr _Nonnull exec)
 		return (str_create(exec));
 
 	index = 0;
+	found = false;
 	while (index < path->len)
 	{
 		str_rm(&file, 0, file.len);
@@ -51,9 +54,17 @@ t_str	get_exec_path(t_vptr *_Nonnull env, t_cstr _Nonnull exec)
 		str_append_str(&file, exec);
 
 		if (access(file.get, F_OK) == 0)
+		{
+			found = true;
 			break ;
+		}
 
 		index++;
+	}
+	if (found == false)
+	{
+		str_rm(&file, 0, file.len);
+		str_append_str(&file, exec);
 	}
 
 	vstr_destroy(path);

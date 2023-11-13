@@ -6,17 +6,19 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:27:16 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 20:44:42 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 22:33:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env_update.h"
 
+#include "dynamic/character.h"
 #include "dynamic/vector.h"
 #include "dynamic/string.h"
 #include "env_pair_create.h"
 #include "env_pair_destroy.h"
 
+#include "error_display.h"
 #include "s_env.h"
 #include <stdio.h>
 
@@ -32,6 +34,7 @@ t_vptr *_Nullable	env_update(t_vptr *_Nonnull env, t_cstr _Nonnull cstr)
 	pair_new = env_pair_create(cstr);
 	if (pair_new.key.len == 0)
 	{
+		error_display("export", "invalid identifier");
 		env_pair_destroy(&pair_new);
 		return (NULL);
 	}

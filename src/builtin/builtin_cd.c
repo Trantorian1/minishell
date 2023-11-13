@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:51:57 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 21:34:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@
 #include <stdint.h>
 #include <unistd.h>
 
+#include "d_pipe.h"
 #include "dynamic/string.h"
 #include "dynamic/vector.h"
 #include "env_get.h"
 #include "env_update.h"
 #include "error_display.h"
+#include "safe_close.h"
 
 static uint8_t	cd_no_home(void);
 static uint8_t	cd_to(
@@ -43,6 +45,9 @@ uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
 
 	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);
+
+	safe_close(pipe_fd[PIPE_WRITE]);
+	safe_close(pipe_fd[PIPE_READ]);
 	
 	home = env_get(data->env, "HOME");
 	if (cmd.arg[1] == NULL)

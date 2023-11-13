@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 13:46:08 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:57:49 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 22:16:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include "state_reset.h"
 
 #include "safe_exit.h"
+#include "vstr_display.h"
 
 static bool	g_in_exec = false;
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:33:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 22:25:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 #include "d_pipe.h"
 
+static bool	has_option_n(t_cstr _Nonnull arg);
+
 uint8_t	builtin_echo(t_data *_Nonnull data, t_cmd cmd, int32_t * _Nonnull pipe_fd)
 {
 	uint8_t	option_n;
@@ -30,10 +32,7 @@ uint8_t	builtin_echo(t_data *_Nonnull data, t_cmd cmd, int32_t * _Nonnull pipe_f
 	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);
 
-	if (cstr_eq(cmd.arg[1], "-n"))
-		option_n = true;
-	else
-		option_n = false;
+	option_n = has_option_n(cmd.arg[1]);
 
 	index = 1 + option_n;
 	message = str_create("");
@@ -53,4 +52,18 @@ uint8_t	builtin_echo(t_data *_Nonnull data, t_cmd cmd, int32_t * _Nonnull pipe_f
 	str_destroy(&message);
 
 	return (EXIT_SUCCESS);
+}
+
+static bool	has_option_n(t_cstr _Nonnull arg)
+{
+	size_t	index;
+
+	if (arg == NULL || (arg[0] != '-' && arg[1] != 'n') || arg[1] == '\0')
+		return (false);
+
+	index = 2;
+	while (arg[index] == 'n')
+		index++;
+	
+	return (arg[index] == '\0');
 }

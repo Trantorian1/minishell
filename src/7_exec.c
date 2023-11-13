@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 14:43:58 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 22:02:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,7 @@ static uint8_t	redir(t_cmd cmd, int32_t pipes[2])
 	index = 0;
 	while (index < cmd.redir->len)
 	{
+		printf("index:%zu\n", index);
 		redir = vptr_get_ptr(t_str, cmd.redir, index);
 		content = *(redir + 1);
 

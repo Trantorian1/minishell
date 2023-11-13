@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 19:39:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/13 22:30:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include "dynamic/string.h"
 #include "dynamic/character.h"
 #include "env_get.h"
+#include "error_display.h"
+
 #include "d_str.h"
 
 static uint8_t	expand_impl(t_vptr *_Nonnull vptr, t_vptr *_Nonnull env, uint8_t exit_code);
@@ -59,7 +61,6 @@ static uint8_t	expand_string(t_str *_Nonnull str, t_vptr *_Nonnull env, uint8_t 
 		return (EXIT_SUCCESS);
 
 	i_curr = i_prev + 1;
-
 	while (is_legal_var_char(str->get[i_curr]))
 		i_curr++;
 
