@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 18:42:35 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 21:52:30 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 00:49:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,18 @@ static f_builtin	g_builtins[E_BUILTIN_SIZE] = {
 	builtin_exit
 };
 
-uint8_t	builtin(t_data *_Nonnull data, t_cmd cmd, t_builtin type, int32_t *_Nonnull pipe_fd)
-{
+uint8_t	builtin(
+	t_data *_Nonnull data, 
+	t_cmd cmd, 
+	t_builtin type, 
+	int32_t *_Nonnull pipe_fd,
+	bool in_child
+) {
 	uint8_t	err_code;
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
 
-	err_code = g_builtins[type](data, cmd, pipe_fd);
+	err_code = g_builtins[type](data, cmd, pipe_fd, in_child);
 	return (err_code);
 }

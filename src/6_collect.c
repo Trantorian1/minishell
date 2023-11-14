@@ -6,10 +6,11 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 01:00:05 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 17:09:20 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 00:20:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "arr_str_destroy.h"
 #include "builtin_get.h"
 #include "e_builtin.h"
 #include "state_collect.h"

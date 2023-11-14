@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:26:24 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 22:49:23 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 00:26:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,11 @@ t_str	get_exec_path(t_vptr *_Nonnull env, t_cstr _Nonnull exec)
 	path = str_split(env_get(env, "PATH"), ":");
 	file = str_create("");
 	if (access(exec, F_OK) == 0)
+	{
+		vstr_destroy(path);
+		str_destroy(&file);
 		return (str_create(exec));
+	}
 
 	index = 0;
 	found = false;

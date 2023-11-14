@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_env.h                                      :+:      :+:    :+:   */
+/*   arr_str_destroy.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 19:54:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:44:40 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/14 00:17:52 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/14 00:20:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BULTIN_ENV_H
-# define BULTIN_ENV_H
+#include "arr_str_destroy.h"
 
-# include <stdint.h>
-# include <stdbool.h>
-# include "s_data.h"
-# include "s_cmd.h"
+#include <stddef.h>
 
-uint8_t	builtin_env(
-	t_data *_Nonnull data, 
-	t_cmd cmd, 
-	int32_t *_Nonnull pipe_fd,
-	bool in_child
-);
+#include "dynamic/alloc.h"
 
-#endif
+void	arr_str_destroy(t_cstr _Nonnull *_Nullable arr)
+{
+	size_t	index;
+
+	if (arr == NULL)
+		return ;
+
+	index = 0;
+	while (arr[index] != NULL)
+	{
+		safe_free(arr[index]);
+		index++;
+	}
+	safe_free(arr);
+}

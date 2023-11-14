@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 19:01:05 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 00:51:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,15 @@
 #include "env_update.h"
 #include "builtin_env.h"
 
-uint8_t	builtin_export(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
-{
+uint8_t	builtin_export(
+	t_data *_Nonnull data, 
+	t_cmd cmd, 
+	int32_t *_Nonnull pipe_fd,
+	bool in_child
+) {
 	size_t	index;
+
+	(void)in_child;
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
@@ -28,7 +34,7 @@ uint8_t	builtin_export(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_
 	index = 1;
 	if (cmd.arg[1] == NULL)
 	{
-		builtin_env(data, cmd, pipe_fd);
+		builtin_env(data, cmd, pipe_fd, in_child);
 		return (EXIT_SUCCESS);
 	}
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 15:56:15 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 22:21:31 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 01:15:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_vptr *_Nullable	input_get(char *_Nonnull prompt)
 
 	// user input is split at every newline
 	tmp = readline(prompt);
-	if (*prompt != '>')
+	if (tmp != NULL && *prompt != '>')
 		add_history(tmp);
 	if (tmp == NULL)
 		return (NULL);

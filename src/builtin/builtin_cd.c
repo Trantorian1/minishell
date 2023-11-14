@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:51:57 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 21:34:01 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 01:09:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,16 @@ static uint8_t	cd_relative(
 	t_vptr *_Nonnull env
 );
 
-uint8_t	builtin_cd(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
-{
+uint8_t	builtin_cd(
+	t_data *_Nonnull data,
+	t_cmd cmd,
+	int32_t *_Nonnull pipe_fd,
+	bool in_child
+) {
 	t_str	home;
 
 	(void)pipe_fd;
+	(void)in_child;
 
 	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);
@@ -107,19 +112,19 @@ static uint8_t	cd_to(t_cstr _Nonnull dst, t_vptr *_Nonnull env)
 
 	if (getcwd(oldpwd, 2048) == NULL)
 	{
-		perror("getcwd");
+		perror(dst);
 		return (EXIT_FAILURE);
 	}
 
 	if (chdir(dst) < 0)
 	{
-		perror("chdir");
+		perror(dst);
 		return (EXIT_FAILURE);
 	}
 	
 	if (getcwd(newpwd, 2048) == NULL)
 	{
-		perror("getcwd");
+		perror(dst);
 		return (EXIT_FAILURE);
 	}
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 13:46:08 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 22:16:24 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 00:10:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,14 @@
 
 #include "safe_exit.h"
 #include "vstr_display.h"
-
-static bool	g_in_exec = false;
-
-static inline void		setup_signals(void);
+#include "sig_main.h"
+#include "sig_exec.h"
 
 void		main_loop(t_data *_Nonnull data)
 {
 	while (!data->should_exit)
 	{
-		setup_signals();
+		sig_main();
 		if (state_parse(data) == EXIT_FAILURE)
 			break ;
 		while (data->index_line < data->user_input->len)
@@ -49,52 +47,13 @@ void		main_loop(t_data *_Nonnull data)
 			state_expand(data);
 			state_unquote(data);
 			state_collect(data);
-			g_in_exec = true;
-			setup_signals();
+
+			sig_exec();
 			state_exec(data);
-			g_in_exec = false;
-			setup_signals();
+			sig_main();
+
 			state_cleanup(data);
 		}
 		state_reset(data);
 	}
-}
-
-static void		handle_sigint(int32_t sig)
-{
-	(void)sig;
-
-	write(STDOUT_FILENO, "\n", 1);
-	if (g_in_exec == false)
-	{
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
-
-static void		handle_sigquit(int32_t sig)
-{
-	(void)sig;
-	rl_redisplay();
-}
-
-static inline void		setup_signals(void)
-{
-	struct sigaction	sa;
-
-	sigemptyset(&sa.sa_mask);
-
-	sa.sa_handler = handle_sigint;
-	sa.sa_flags = 0;
-	if (sigaction(SIGINT, &sa, NULL) == -1)
-	{
-		perror("sigaction");
-		safe_exit(EXIT_FAILURE);
-	}
-
-	if (g_in_exec == true)
-		signal(SIGQUIT, handle_sigquit);
-	else
-		signal(SIGQUIT, SIG_IGN);
 }

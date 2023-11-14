@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:33:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 22:25:53 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 00:43:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,17 @@
 
 static bool	has_option_n(t_cstr _Nonnull arg);
 
-uint8_t	builtin_echo(t_data *_Nonnull data, t_cmd cmd, int32_t * _Nonnull pipe_fd)
-{
+uint8_t	builtin_echo(
+	t_data *_Nonnull data, 
+	t_cmd cmd, 
+	int32_t * _Nonnull pipe_fd,
+	bool in_child
+) {
 	uint8_t	option_n;
 	size_t	index;
 	t_str	message;
+
+	(void)in_child;
 
 	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);

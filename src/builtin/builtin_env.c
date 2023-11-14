@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 19:56:11 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 21:34:25 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 00:44:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,17 @@
 #include "d_pipe.h"
 #include "safe_close.h"
 
-uint8_t	builtin_env(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
-{
+uint8_t	builtin_env(
+	t_data *_Nonnull data, 
+	t_cmd cmd, 
+	int32_t *_Nonnull pipe_fd,
+	bool in_child
+) {
 	size_t		index;
 	t_env_pair	pair;
 	t_str		message;
+
+	(void)in_child;
 
 	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 19:10:37 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 21:36:16 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 00:59:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,12 @@
 
 static inline void	exit_impl(t_data *_Nonnull data, uint8_t code);
 
-uint8_t	builtin_exit(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
-{
+uint8_t	builtin_exit(
+	t_data *_Nonnull data, 
+	t_cmd cmd, 
+	int32_t *_Nonnull pipe_fd,
+	bool in_child
+) {
 	int64_t	code;
 
 	(void)pipe_fd;
@@ -48,7 +52,8 @@ uint8_t	builtin_exit(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd
 			error_display("exit", "too many arguments");
 	}
 
-	write(pipe_fd[PIPE_WRITE], "exit\n", 5);
+	if (in_child == false)
+		write(pipe_fd[PIPE_WRITE], "exit\n", 5);
 	if (cmd.arg[1] == NULL || cmd.arg[2] == NULL || code == 2)
 	{
 		safe_close(pipe_fd[PIPE_WRITE]);

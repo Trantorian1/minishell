@@ -1,31 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_none.c                                     :+:      :+:    :+:   */
+/*   sig_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 09:42:27 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:46:18 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/13 23:46:27 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/14 00:09:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin_none.h"
+#include "sig_main.h"
 
+#include <readline/readline.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <signal.h>
+#include <unistd.h>
 
-uint8_t	builtin_none(
-	t_data *_Nonnull data, 
-	t_cmd cmd, 
-	int32_t *_Nonnull pipe_fd,
-	bool in_child
-) {
-	(void)cmd;
-	(void)pipe_fd;
-	(void)in_child;
+#include "safe_exit.h"
 
-	if (data == NULL)
-		return (EXIT_FAILURE);
+static void	handle_sigint(int32_t sig);
 
-	return (EXIT_SUCCESS);
+void	sig_main(void)
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+static void	handle_sigint(int32_t sig)
+{
+	(void)sig;
+
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }

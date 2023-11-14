@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 20:29:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 00:48:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,19 @@
 
 #include "env_try_delete.h"
 
-uint8_t	builtin_unset(t_data *_Nonnull data, t_cmd cmd, int32_t *_Nonnull pipe_fd)
-{
+uint8_t	builtin_unset(
+	t_data *_Nonnull data,
+	t_cmd cmd,
+	int32_t *_Nonnull pipe_fd,
+	bool in_child
+) {
 	size_t	index;
+
+	(void)pipe_fd;
+	(void)in_child;
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-
-	(void)pipe_fd;
 
 	index = 1;
 	while (cmd.arg[index] != NULL)
