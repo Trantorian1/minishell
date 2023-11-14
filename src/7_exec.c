@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 01:00:25 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 06:32:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,29 +220,25 @@ static uint8_t	redir(t_cmd cmd, int32_t pipes[2])
 static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2])
 {
 	t_cmd		cmd;
-	t_builtin	builtin;
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
 
 	cmd = vptr_get(t_cmd, data->cmd, index);
-	builtin = builtin_get(cmd.arg[0]);
-
 	if (redir(cmd, redirs) == EXIT_FAILURE)
 		safe_exit(EXIT_FAILURE);
 
-	if (redirs[PIPE_READ] != STDIN_FILENO && builtin == BUILTIN_NONE)
+	if (redirs[PIPE_READ] != STDIN_FILENO)
 	{
 		safe_dup2(redirs[PIPE_READ], STDIN_FILENO);
 		safe_close(redirs[PIPE_READ]);
 	}
 
-	if (redirs[PIPE_WRITE] != STDOUT_FILENO && builtin == BUILTIN_NONE)
+	if (redirs[PIPE_WRITE] != STDOUT_FILENO)
 	{
 		safe_dup2(redirs[PIPE_WRITE], STDOUT_FILENO);
 		safe_close(redirs[PIPE_WRITE]);
 	}
 
-	// exectute command
 	safe_exit(safe_exec(data, cmd, redirs));
 }
