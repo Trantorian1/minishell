@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:42:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 22:05:25 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 06:49:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,5 +279,7 @@ static uint8_t	tokenise_impl(
 	}
 	save_prev(arg, input, i_prev, i_curr);
 
+	if (str_eq(vptr_get(t_str, arg, arg->len - 1), PIPE))
+		return (error_display("pipe", "unterminated pipe"));
 	return (EXIT_SUCCESS);
 }
