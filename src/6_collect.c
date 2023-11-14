@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 01:00:05 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:20:34 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 06:37:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,42 +69,30 @@ static t_cstr *_Nullable	collect(t_vptr *_Nonnull vptr, size_t i_curr)
 
 static uint8_t	collect_arg(t_data *_Nonnull data)
 {
-	size_t	i_prev;
-	size_t	i_curr;
+	t_vptr	*arg;
+	size_t	index;
 	t_str	exec;
 	t_cmd	cmd;
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
 
-	exec = vptr_get(t_str, data->arg, 0);
-	if (builtin_get(exec.get) == BUILTIN_NONE)
+	arg = data->arg;
+	index = 0;
+	while (index < data->arg->len)
 	{
-		exec = get_exec_path(data->env, exec.get);
-		vstr_replace(data->arg, exec, 0);
-	}
+		exec = vptr_get(t_str, arg, index);
+		if (builtin_get(exec.get) == BUILTIN_NONE)
+			vstr_replace(arg, get_exec_path(data->env, exec.get), index);
 
-	i_prev = 0;
-	i_curr = 0;
-	while (i_curr < data->arg->len)
-	{
-		if (str_eq(vptr_get(t_str, data->arg, i_curr), PIPE))
-		{
-			cmd.arg = collect(data->arg, i_prev);
-			vptr_append(data->cmd, &cmd);
-			i_prev = i_curr + 1;
+		cmd.arg = collect(arg, index);
+		vptr_append(data->cmd, &cmd);
 
-			exec = vptr_get(t_str, data->arg, i_prev);
-			if (builtin_get(exec.get) == BUILTIN_NONE)
-			{
-				exec = get_exec_path(data->env, exec.get);
-				vstr_replace(data->arg, exec, i_prev);
-			}
-		}
-		i_curr++;
+		while (index < arg->len && !str_eq(vptr_get(t_str, arg, index), PIPE))
+			index++;
+
+		index++;
 	}
-	cmd.arg = collect(data->arg, i_prev);
-	vptr_append(data->cmd, &cmd);
 
 	return (EXIT_SUCCESS);
 }
