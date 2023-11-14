@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:39:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 05:08:57 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 05:47:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@
 #include "dynamic/string.h"
 #include "dynamic/character.h"
 #include "input_get.h"
+#include "delimiter_get.h"
 
 #include "d_str.h"
-
-static inline t_str	delimiter_get(t_vptr *_Nonnull redir, size_t i_curr);
 
 static inline t_str	heredoc_content(
 	t_data *_Nonnull data,
@@ -74,32 +73,6 @@ uint8_t	state_heredoc(t_data *_Nonnull data)
 	}
 
 	return (EXIT_SUCCESS);
-}
-
-static inline t_str	delimiter_get(
-	t_vptr *_Nonnull redir,
-	size_t i_curr
-) {
-	t_str	str_curr;
-	t_str	delimiter;
-
-	if (redir == NULL || i_curr >= redir->len)
-		return (str_create(""));
-
-	str_curr = vptr_get(t_str, redir, i_curr);
-	delimiter = str_create("");
-
-	str_curr = vptr_get(t_str, redir, i_curr);
-	while (!str_eq(str_curr, WHITESPACE))
-	{
-		if (!str_eq(str_curr, QUOTE_DOUBLE) && !str_eq(str_curr, QUOTE_SINGLE))
-			str_append_str(&delimiter, str_curr.get);
-
-		vstr_rm(redir, i_curr);
-		str_curr = vptr_get(t_str, redir, i_curr);
-	}
-
-	return (delimiter);
 }
 
 static inline uint8_t	update_input(t_data *_Nonnull data)
