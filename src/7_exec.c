@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 13:22:17 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:17:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static uint8_t	check_for_builtin(t_data *_Nonnull data)
 	t_builtin	builtin_type;
 	int32_t		redirs[2];
 
-	cmd = vptr_get(t_cmd, data->cmd, 0);
+	cmd = *(t_cmd *)vptr_get(data->cmd, 0);
 	builtin_type = builtin_get(cmd.arg[0]);
 	if (builtin_type != BUILTIN_NONE)
 	{
@@ -137,7 +137,7 @@ static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2])
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-	cmd = vptr_get(t_cmd, data->cmd, index);
+	cmd = *(t_cmd *)vptr_get(data->cmd, index);
 	builtin_type = builtin_get(cmd.arg[0]);
 	if (redir(cmd, redirs) == EXIT_FAILURE)
 		safe_exit(EXIT_FAILURE);

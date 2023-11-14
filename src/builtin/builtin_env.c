@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 19:56:11 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:29:29 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:05:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ uint8_t	builtin_env(
 	index = 0;
 	while (index < data->env->len)
 	{
-		pair = vptr_get(t_env_pair, data->env, index);
+		pair = *(t_env_pair *)vptr_get(data->env, index);
 		message = str_create(pair.key.get);
 		str_append_char(&message, '=');
 		str_append_str(&message, pair.val.get);

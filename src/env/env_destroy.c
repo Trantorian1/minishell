@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:38:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:31:25 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:07:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	env_destroy(t_vptr *_Nullable env)
 	index = 0;
 	while (index < env->len)
 	{
-		env_pair_destroy(vptr_get_ptr(t_env_pair, env, index));
+		env_pair_destroy((t_env_pair *)vptr_get((t_vptr * _Nonnull)env, index));
 		index++;
 	}
 	vptr_destroy(env);

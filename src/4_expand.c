@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 19:39:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:58:51 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:13:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static uint8_t	expand_impl(
 	index = 0;
 	while (index < vptr->len)
 	{
-		str = vptr_get_ptr(t_str, vptr, index);
+		str = (t_str *)vptr_get(vptr, index);
 		if (str_eq(*str, QUOTE_SINGLE))
 			index += 2;
 		else

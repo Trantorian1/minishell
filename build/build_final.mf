@@ -6,7 +6,7 @@
 #    By: emcnab <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 15:14:44 by emcnab            #+#    #+#              #
-#    Updated: 2023/11/12 15:43:57 by marvin           ###   ########.fr        #
+#    Updated: 2023/11/14 15:19:10 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,8 +27,7 @@ FILES_DEPS = $(patsubst $(DIR_SRCS)/%.c,$(DIR_DEPS)/%.d,$(FILES_SRCS))
 
 OPT        = 
 LIBS       = -lreadline -Lvendor/dynamic/ -ldynamic
-# DEBUG      = -fsanitize=address,leak -g 
-DEBUG      = -g
+DEBUG      =  -g
 
 C_COMPILER = clang
 I_FLAGS    = $(foreach dir,$(DIR_INCL),-I$(dir)) -I vendor

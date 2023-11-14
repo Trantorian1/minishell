@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:39:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:55:58 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:12:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ uint8_t	state_heredoc(t_data *_Nonnull data)
 	index = 0;
 	while (index < data->redir->len)
 	{
-		redir_curr = vptr_get(t_str, data->redir, index);
+		redir_curr = *(t_str *)vptr_get(data->redir, index);
 		if (str_eq(redir_curr, HEREDOC))
 		{
 			index += 2;
@@ -97,8 +97,7 @@ static inline uint8_t	update_content(
 ) {
 	t_str	line;
 
-	line = vptr_get(t_str, data->user_input, data->index_line);
-
+	line = *(t_str *)vptr_get(data->user_input, data->index_line);
 	if (str_eq(line, delimiter.get))
 	{
 		vstr_rm(data->user_input, data->index_line);
@@ -110,7 +109,6 @@ static inline uint8_t	update_content(
 		str_append_char(content, '\n');
 		data->index_line++;
 	}
-
 	return (EXIT_SUCCESS);
 }
 

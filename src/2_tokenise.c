@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:42:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:46:01 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:11:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ uint8_t	state_tokenise(t_data *_Nonnull data)
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-	line = vptr_get(t_str, data->user_input, data->index_line);
-	data->arg = vptr_create(t_str, 0);
-	data->redir = vptr_create(t_str, 0);
+	line = *(t_str *)vptr_get(data->user_input, data->index_line);
+	data->arg = vptr_create(sizeof(t_str), 0);
+	data->redir = vptr_create(sizeof(t_str), 0);
 	if (tokenise_arg(data, line) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	data->index_line++;
@@ -100,7 +100,7 @@ static inline uint8_t	tokenise_arg(
 			return (EXIT_FAILURE);
 	}
 	tokenise_prev(data->arg, input, i[PREV], i[CURR]);
-	if (str_eq(vptr_get(t_str, data->arg, data->arg->len - 1), PIPE))
+	if (str_eq(*(t_str *)vptr_get(data->arg, data->arg->len - 1), PIPE))
 		return (error_display("pipe", "unterminated pipe"));
 	return (EXIT_SUCCESS);
 }

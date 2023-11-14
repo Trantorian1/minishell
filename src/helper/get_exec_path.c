@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:26:24 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:40:37 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:09:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static inline t_str	search_in_path(t_vptr *_Nonnull env, t_cstr _Nonnull exec)
 	while (found == false && ++index < path->len)
 	{
 		str_rm(&file, 0, file.len);
-		str_append_str(&file, vptr_get(t_str, path, index).get);
+		str_append_str(&file, (*(t_str *)vptr_get(path, index)).get);
 		str_append_str(&file, "/");
 		str_append_str(&file, exec);
 		if (access(file.get, F_OK) == 0)

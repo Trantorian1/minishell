@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 13:14:44 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 13:21:52 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:18:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ uint8_t	redir(t_cmd cmd, int32_t pipes[2])
 	index = 0;
 	while (index < cmd.redir->len)
 	{
-		redir = vptr_get_ptr(t_str, cmd.redir, index);
+		redir = (t_str *)vptr_get(cmd.redir, index);
 		content = *(redir + 1);
 		if (str_eq(*redir, REDIR_HEREDOC) && redir_heredoc(content, pipes))
 			return (EXIT_FAILURE);

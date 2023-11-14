@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:27:16 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:33:41 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:09:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_vptr *_Nullable	env_update(t_vptr *_Nonnull env, t_cstr _Nonnull cstr)
 	index = (size_t)(-1);
 	while (++index < env->len)
 	{
-		pair_curr = vptr_get_ptr(t_env_pair, env, index);
+		pair_curr = (t_env_pair *)vptr_get(env, index);
 		if (str_eq(pair_curr->key, pair_new.key.get))
 		{
 			str_rm(&pair_curr->val, 0, pair_curr->val.len);

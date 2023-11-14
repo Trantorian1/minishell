@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 01:00:05 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 12:01:12 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:16:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,28 +35,28 @@ uint8_t	state_collect(t_data *_Nonnull data)
 {
 	if (data == NULL)
 		return (EXIT_FAILURE);
-	data->cmd = vptr_create(t_cmd, 0);
+	data->cmd = vptr_create(sizeof(t_cmd), 0);
 	if (collect_arg(data) || collect_redir(data))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
-static t_cstr *_Nullable	collect(t_vptr *_Nonnull vptr, size_t i_curr)
+static t_cstr *_Nullable	collect(t_vptr *_Nonnull vptr, size_t icur)
 {
 	size_t	i_prev;
 	t_cstr	*arg;
 
-	if (vptr == NULL || i_curr > vptr->len)
+	if (vptr == NULL || icur > vptr->len)
 		return (NULL);
-	i_prev = i_curr;
-	while (i_curr < vptr->len && !str_eq(vptr_get(t_str, vptr, i_curr), PIPE))
-		i_curr++;
-	arg = safe_alloc(sizeof(*arg) * (i_curr - i_prev + 1));
-	arg[i_curr - i_prev] = NULL;
-	while (i_curr > i_prev)
+	i_prev = icur;
+	while (icur < vptr->len && !str_eq(*(t_str *)vptr_get(vptr, icur), PIPE))
+		icur++;
+	arg = safe_alloc(sizeof(*arg) * (icur - i_prev + 1));
+	arg[icur - i_prev] = NULL;
+	while (icur > i_prev)
 	{
-		arg[i_curr - i_prev - 1] = vptr_get(t_str, vptr, i_curr - 1).get;
-		i_curr--;
+		arg[icur - i_prev - 1] = (*(t_str *)vptr_get(vptr, icur - 1)).get;
+		icur--;
 	}
 	return (arg);
 }
@@ -64,24 +64,24 @@ static t_cstr *_Nullable	collect(t_vptr *_Nonnull vptr, size_t i_curr)
 static uint8_t	collect_arg(t_data *_Nonnull data)
 {
 	t_vptr	*arg;
-	size_t	index;
+	size_t	i;
 	t_str	exec;
 	t_cmd	cmd;
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
 	arg = data->arg;
-	index = 0;
-	while (index < data->arg->len)
+	i = 0;
+	while (i < data->arg->len)
 	{
-		exec = vptr_get(t_str, arg, index);
+		exec = *(t_str *)vptr_get(arg, i);
 		if (builtin_get(exec.get) == BUILTIN_NONE)
-			vstr_replace(arg, get_exec_path(data->env, exec.get), index);
-		cmd.arg = collect(arg, index);
+			vstr_replace(arg, get_exec_path(data->env, exec.get), i);
+		cmd.arg = collect(arg, i);
 		vptr_append(data->cmd, &cmd);
-		while (index < arg->len && !str_eq(vptr_get(t_str, arg, index), PIPE))
-			index++;
-		index++;
+		while (i < arg->len && !str_eq(*(t_str *)vptr_get(arg, i), PIPE))
+			i++;
+		i++;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -95,15 +95,15 @@ static uint8_t	collect_redir(t_data *_Nonnull data)
 	if (data == NULL)
 		return (EXIT_FAILURE);
 	i_curr = 0;
-	cmd = vptr_get_ptr(t_cmd, data->cmd, 0);
-	cmd->redir = vptr_create(t_str, 0);
+	cmd = (t_cmd *)vptr_get(data->cmd, 0);
+	cmd->redir = vptr_create(sizeof(t_str), 0);
 	while (i_curr < data->redir->len)
 	{
-		str = vptr_get(t_str, data->redir, i_curr);
+		str = *(t_str *)vptr_get(data->redir, i_curr);
 		if (str_eq(str, PIPE))
 		{
 			cmd++;
-			cmd->redir = vptr_create(t_str, 0);
+			cmd->redir = vptr_create(sizeof(t_str), 0);
 		}
 		else
 			vstr_append(cmd->redir, str_create(str.get));
