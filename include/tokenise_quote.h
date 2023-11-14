@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state_tokenise.h                                   :+:      :+:    :+:   */
+/*   tokenise_quote.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 13:41:10 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 07:41:47 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/14 06:52:17 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/14 08:29:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STATE_TOKENISE_H
-# define STATE_TOKENISE_H
+#ifndef TOKENISE_QUOTE_H
+# define TOKENISE_QUOTE_H
 
 # include <stdint.h>
-# include "dynamic/string.h"
-# include "s_data.h"
 
-# define PREV 0
-# define CURR 1
+# include "dynamic/vector.h"
 
-uint8_t	state_tokenise(t_data *_Nonnull data);
+uint8_t	tokenise_quote(
+	t_vptr *_Nonnull vptr,
+	size_t *_Nonnull i,
+	t_str input,
+	char c
+);
 
 #endif

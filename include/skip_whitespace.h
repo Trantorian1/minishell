@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state_tokenise.h                                   :+:      :+:    :+:   */
+/*   skip_whitespace.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 13:41:10 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 07:41:47 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/14 07:44:13 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/14 07:45:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STATE_TOKENISE_H
-# define STATE_TOKENISE_H
+#ifndef SKIP_WHITESPACE_H
+# define SKIP_WHITESPACE_H
 
-# include <stdint.h>
+# include <stddef.h>
 # include "dynamic/string.h"
-# include "s_data.h"
 
-# define PREV 0
-# define CURR 1
-
-uint8_t	state_tokenise(t_data *_Nonnull data);
+size_t	skip_whitespace(t_str str, size_t i_curr);
 
 #endif

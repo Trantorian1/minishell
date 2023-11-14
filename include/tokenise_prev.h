@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state_tokenise.h                                   :+:      :+:    :+:   */
+/*   tokenise_prev.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 13:41:10 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 07:41:47 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/14 06:55:32 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/14 06:58:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STATE_TOKENISE_H
-# define STATE_TOKENISE_H
+#ifndef TOKENISE_PREV_H
+# define TOKENISE_PREV_H
 
+# include <stddef.h>
 # include <stdint.h>
+# include "dynamic/vector.h"
 # include "dynamic/string.h"
-# include "s_data.h"
 
-# define PREV 0
-# define CURR 1
-
-uint8_t	state_tokenise(t_data *_Nonnull data);
+uint8_t	tokenise_prev(
+	t_vptr *_Nonnull vptr,
+	t_str input,
+	size_t i_prev,
+	size_t i_curr
+);
 
 #endif

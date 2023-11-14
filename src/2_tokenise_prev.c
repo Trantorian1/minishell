@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state_tokenise.h                                   :+:      :+:    :+:   */
+/*   2_tokenise_prev.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 13:41:10 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 07:41:47 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/14 06:58:28 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/14 06:59:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STATE_TOKENISE_H
-# define STATE_TOKENISE_H
+#include "tokenise_prev.h"
 
-# include <stdint.h>
-# include "dynamic/string.h"
-# include "s_data.h"
+#include <stdlib.h>
 
-# define PREV 0
-# define CURR 1
+uint8_t	tokenise_prev(
+	t_vptr *_Nonnull vptr,
+	t_str input,
+	size_t i_prev,
+	size_t i_curr
+) {
+	if (vptr == NULL)
+		return (EXIT_FAILURE);
 
-uint8_t	state_tokenise(t_data *_Nonnull data);
+	if (i_prev != i_curr)
+		vstr_append(vptr, str_substr(input, i_prev, i_curr));
 
-#endif
+	return (EXIT_SUCCESS);
+}
