@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 02:11:28 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 04:41:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int32_t		main(int32_t argc, t_cstr *argv, t_cstr *envp)
 	};
 
 	data.env = (t_vptr *_Nonnull)env_create(envp);
-	main_loop(&data);
+	if (main_loop(&data) == EXIT_FAILURE)
+		printf("exit\n");
 
 	rl_clear_history();
 	state_cleanup(&data);

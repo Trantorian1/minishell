@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:39:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 04:35:12 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 05:08:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@
 
 #include "d_str.h"
 
-static t_str	delimiter_get(t_vptr *_Nonnull redir, size_t i_curr);
+static inline t_str	delimiter_get(t_vptr *_Nonnull redir, size_t i_curr);
 
-static t_str	heredoc_content(
+static inline t_str	heredoc_content(
 	t_data *_Nonnull data,
 	t_vptr *_Nonnull redir,
 	t_str delimiter,
@@ -76,7 +76,7 @@ uint8_t	state_heredoc(t_data *_Nonnull data)
 	return (EXIT_SUCCESS);
 }
 
-static t_str	delimiter_get(
+static inline t_str	delimiter_get(
 	t_vptr *_Nonnull redir,
 	size_t i_curr
 ) {
@@ -102,15 +102,68 @@ static t_str	delimiter_get(
 	return (delimiter);
 }
 
-static t_str	heredoc_content(
+static inline uint8_t	update_input(t_data *_Nonnull data)
+{
+	t_vptr	*input;
+	
+	input = input_get("> ");
+	if (sigtype == SIGINT)
+		return (EXIT_FAILURE);
+	if (input == NULL)
+	{
+		error_display("heredoc", "eof encountered");
+		return (EXIT_FAILURE);
+	}
+	if (input->len != 0)
+		vptr_join(data->user_input, input);
+	else
+		vstr_append(data->user_input, str_create(""));
+	vptr_destroy(input);
+	return (EXIT_SUCCESS);
+}
+
+static inline uint8_t	update_content(
+	t_data *_Nonnull data,
+	t_str *_Nonnull content,
+	t_str delimiter
+) {
+	t_str	line;
+
+	line = vptr_get(t_str, data->user_input, data->index_line);
+
+	if (str_eq(line, delimiter.get))
+	{
+		vstr_rm(data->user_input, data->index_line);
+		return (EXIT_FAILURE);
+	}
+	else
+	{
+		str_append_str(content, line.get);
+		str_append_char(content, '\n');
+		data->index_line++;
+	}
+
+	return (EXIT_SUCCESS);
+}
+
+static inline void	heredoc_reset(int32_t stdin_prev)
+{
+	sig_main();
+	if (sigtype == SIGINT)
+	{
+		safe_dup2(stdin_prev, STDIN_FILENO);
+		write(STDIN_FILENO, "\n", 1);
+	}
+	safe_close(stdin_prev);
+}
+
+static inline t_str	heredoc_content(
 	t_data *_Nonnull data,
 	t_vptr *_Nonnull redir,
 	t_str delimiter,
 	size_t i_curr
 ) {
 	t_str	content;
-	t_str	line;
-	t_vptr	*input;
 	int32_t	stdin_prev;
 
 	if (redir == NULL || i_curr >= redir->len)
@@ -120,50 +173,14 @@ static t_str	heredoc_content(
 	stdin_prev = dup(STDIN_FILENO);
 	sig_heredoc();
 
-	sigtype = SIGNONE;
 	while(true)
 	{
-		if (data->index_line == data->user_input->len)
-		{
-			input = input_get("> ");
-			if (sigtype == SIGINT)
-				break ;
-			if (input == NULL)
-			{
-				error_display("heredoc", "eof encountered");
-				break ;
-			}
-			if (input->len == 0)
-			{
-				str_append_char(&content, '\n');
-				vptr_destroy(input);
-				continue ;
-			}
-			vptr_join(data->user_input, input);
-			vptr_destroy(input);
-		}
-		line = vptr_get(t_str, data->user_input, data->index_line);
-
-		if (str_eq(line, delimiter.get))
-		{
-			vstr_rm(data->user_input, data->index_line);
+		if (data->index_line == data->user_input->len && update_input(data))
 			break ;
-		}
-		else
-		{
-			str_append_str(&content, line.get);
-			str_append_char(&content, '\n');
-			data->index_line++;
-		}
+		if (update_content(data, &content, delimiter))
+			break ;
 	}
-
-	sig_main();
-	if (sigtype == SIGINT)
-	{
-		safe_dup2(stdin_prev, STDIN_FILENO);
-		safe_close(stdin_prev);
-		write(STDIN_FILENO, "\n", 1);
-	}
+	heredoc_reset(stdin_prev);
 
 	return (content);
 }

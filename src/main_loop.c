@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 13:46:08 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 04:13:27 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 05:12:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,19 @@
 #include "sig_main.h"
 #include "sig_exec.h"
 
-void		main_loop(t_data *_Nonnull data)
+uint8_t	main_loop(t_data *_Nonnull data)
 {
+	uint8_t	err_code;
+
+	err_code = EXIT_SUCCESS;
 	while (!data->should_exit)
 	{
 		sig_main();
-		if (state_parse(data) == EXIT_FAILURE)
+
+		err_code = state_parse(data);
+		if (err_code == EXIT_FAILURE)
 			break ;
+
 		while (data->index_line < data->user_input->len)
 		{
 			if (state_tokenise(data))
@@ -55,9 +61,12 @@ void		main_loop(t_data *_Nonnull data)
 				state_exec(data);
 				sig_main();
 			}
+			sigtype = SIGNONE;
 
 			state_cleanup(data);
 		}
 		state_reset(data);
 	}
+
+	return (err_code);
 }
