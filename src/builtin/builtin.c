@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 18:42:35 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:49:37 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:00:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,7 @@ uint8_t	builtin(
 		return (EXIT_FAILURE);
 
 	err_code = g_builtins[type](data, cmd, pipe_fd, in_child);
+	safe_close(pipe_fd[PIPE_READ]);
+	safe_close(pipe_fd[PIPE_WRITE]);
 	return (err_code);
 }

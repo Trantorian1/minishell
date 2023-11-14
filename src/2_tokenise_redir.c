@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 08:41:32 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 09:19:59 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 10:16:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ uint8_t	tokenise_redir(
 	tokenise_prev(data->arg, input, i[PREV], i[CURR]);
 	if (tokenise_redir_impl(data, &i[CURR], input) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+	i[PREV] = i[CURR];
 	*command = true;
 	return (EXIT_SUCCESS);
 }
@@ -88,7 +89,7 @@ static inline uint8_t	tokenise_redir_impl(
 		}
 		else if (is_whitespace(input.get[i[CURR]]))
 		{
-			if (tokenise_whitespace(data->arg, i, &command, input))
+			if (tokenise_whitespace(data->redir, i, &command, input))
 				return (EXIT_FAILURE);
 		}
 		else
@@ -96,7 +97,7 @@ static inline uint8_t	tokenise_redir_impl(
 	}
 	tokenise_prev(data->redir, input, i[PREV], i[CURR]);
 	vstr_append(data->redir, str_create(WHITESPACE));
-	store[PREV] = i[CURR];
+	*store = i[CURR];
 
 	return (EXIT_SUCCESS);
 }

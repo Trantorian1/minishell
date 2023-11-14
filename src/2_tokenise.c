@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:42:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 09:21:56 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:07:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,38 @@ uint8_t	state_tokenise(t_data *_Nonnull data)
 	return (EXIT_SUCCESS);
 }
 
+static inline uint8_t	tokenise_loop(
+	t_data *_Nonnull data,
+	uint8_t *_Nonnull command,
+	size_t *_Nonnull i,
+	t_str input
+) {
+	if (input.get[i[CURR]] == '\'' || input.get[i[CURR]] == '"')
+	{
+		if (tokenise_quote(data->arg, i, input, input.get[i[CURR]]))
+			return (EXIT_FAILURE);
+		*command = true;
+	}
+	else if (input.get[i[CURR]] == '|')
+	{
+		if (tokenise_pipe(data, i, command, input))
+			return (EXIT_FAILURE);
+	}
+	else if ((input.get[i[CURR]] == '>' || input.get[i[CURR]] == '<'))
+	{
+		if (tokenise_redir(data, i, command, input))
+			return (EXIT_FAILURE);
+	}
+	else if (is_whitespace(input.get[i[CURR]]))
+	{
+		if (tokenise_whitespace(data->arg, i, command, input))
+			return (EXIT_FAILURE);
+	}
+	else
+		i[CURR]++;
+	return (EXIT_SUCCESS);
+}
+
 static inline uint8_t	tokenise_arg(
 	t_data *_Nonnull data, 
 	t_str input
@@ -70,29 +102,8 @@ static inline uint8_t	tokenise_arg(
 	command = false;
 	while (i[CURR] < input.len)
 	{
-		if (input.get[i[CURR]] == '\'' || input.get[i[CURR]] == '"')
-		{
-			if (tokenise_quote(data->arg, i, input, input.get[i[CURR]]))
-				return (EXIT_FAILURE);
-			command = true;
-		}
-		else if (input.get[i[CURR]] == '|')
-		{
-			if (tokenise_pipe(data, i, &command, input))
-				return (EXIT_FAILURE);
-		}
-		else if (input.get[i[CURR]] == '>' || input.get[i[CURR]] == '<')
-		{
-			if (tokenise_redir(data, i, &command, input))
-				return (EXIT_FAILURE);
-		}
-		else if (is_whitespace(input.get[i[CURR]]))
-		{
-			if (tokenise_whitespace(data->arg, i, &command, input))
-				return (EXIT_FAILURE);
-		}
-		else
-			i[CURR]++;
+		if (tokenise_loop(data, &command, i, input))
+			return (EXIT_FAILURE);
 	}
 	tokenise_prev(data->arg, input, i[PREV], i[CURR]);
 

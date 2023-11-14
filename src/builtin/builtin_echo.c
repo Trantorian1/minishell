@@ -6,12 +6,13 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:33:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 01:32:54 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:08:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin_echo.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <stddef.h>

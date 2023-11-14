@@ -6,17 +6,19 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 17:19:07 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:51:31 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:05:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "safe_exec.h"
 
 #include <stdlib.h>
+#include <strings.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "d_pipe.h"
 #include "dynamic/alloc.h"
 #include "builtin_get.h"
 #include "builtin.h"
