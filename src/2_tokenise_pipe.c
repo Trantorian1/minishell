@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 07:34:17 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 09:12:58 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:46:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 #include "skip_whitespace.h"
 
 static inline size_t	tokenise_pipe_impl(
-	t_vptr *_Nonnull arg,
-	t_vptr *_Nonnull redir,
-	t_str str,
-	size_t i_curr
-);
+							t_vptr *_Nonnull arg,
+							t_vptr *_Nonnull redir,
+							t_str str,
+							size_t i_curr
+							);
 
 uint8_t	tokenise_pipe(
 	t_data *_Nonnull data,
@@ -48,9 +48,7 @@ static inline size_t	tokenise_pipe_impl(
 ) {
 	if (arg == NULL || redir == NULL || str.len <= i_curr)
 		return (str.len);
-
 	vstr_append(arg, str_create(PIPE));
 	vstr_append(redir, str_create(PIPE));
-
 	return (skip_whitespace(str, i_curr + 1));
 }

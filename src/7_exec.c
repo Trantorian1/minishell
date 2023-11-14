@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:00:21 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 13:22:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "builtin_get.h"
 #include "e_builtin.h"
+#include "redir.h"
 #include "safe_exit.h"
 #include "state_exec.h"
 
@@ -41,25 +42,18 @@
 #include "d_str.h"
 #include "d_pipe.h"
 
-#define F_IN O_RDONLY
-#define F_OUT O_WRONLY | O_CREAT | O_TRUNC
-#define F_APPEND O_WRONLY | O_APPEND | O_CREAT
-
 static uint8_t	check_for_builtin(t_data *_Nonnull data);
 static uint8_t	fork_commands(t_data *_Nonnull data);
-static uint8_t	redir(t_cmd cmd, int32_t pipes[2]);
 static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2]);
 
 uint8_t	state_exec(t_data *_Nonnull data)
 {
 	if (data == NULL || data->cmd->len < 1)
 		return (EXIT_FAILURE);
-
 	if (data->cmd->len == 1)
 		data->exit_code = check_for_builtin(data);
 	else
 		data->exit_code = fork_commands(data);
-
 	return (EXIT_SUCCESS);
 }
 
@@ -71,150 +65,69 @@ static uint8_t	check_for_builtin(t_data *_Nonnull data)
 
 	cmd = vptr_get(t_cmd, data->cmd, 0);
 	builtin_type = builtin_get(cmd.arg[0]);
-
 	if (builtin_type != BUILTIN_NONE)
 	{
 		redirs[0] = STDIN_FILENO;
 		redirs[1] = STDOUT_FILENO;
 		if (redir(cmd, redirs) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		return (builtin(data, cmd, builtin_type, redirs, false));
+		return (builtin(data, cmd, redirs, false));
 	}
 	else
 		return (fork_commands(data));
+}
+
+static uint8_t	fork_loop(
+	size_t *_Nonnull index,
+	int32_t *_Nonnull pipe_id,
+	t_data *_Nonnull data,
+	int32_t *_Nonnull read_fd
+) {
+	int32_t	pid;
+
+	if (index == NULL || pipe_id == NULL || data == NULL || read_fd == NULL)
+		return (EXIT_FAILURE);
+	if (*index != data->cmd->len - 1)
+		safe_pipe(pipe_id);
+	else
+		pipe_id[PIPE_WRITE] = STDOUT_FILENO;
+	pid = safe_fork();
+	if (pid == 0)
+	{
+		if (*index != data->cmd->len - 1)
+			safe_close(pipe_id[PIPE_READ]);
+		child(data, *index, (int32_t []){(*read_fd), pipe_id[PIPE_WRITE]});
+	}
+	else
+	{
+		if (*index != 0)
+			safe_close(*read_fd);
+		if (*index != data->cmd->len - 1)
+			safe_close(pipe_id[PIPE_WRITE]);
+		*read_fd = pipe_id[PIPE_READ];
+	}
+	(*index)++;
+	return (EXIT_SUCCESS);
 }
 
 static uint8_t	fork_commands(t_data *_Nonnull data)
 {
 	size_t	index;
 	int32_t	read_fd;
-	int32_t	pipe_id[2] = {STDIN_FILENO , STDOUT_FILENO};
+	int32_t	pipe_id[2];
 	int32_t	pid;
 
 	index = 0;
 	read_fd = STDIN_FILENO;
 	pid = 0;
-
+	pipe_id[0] = STDIN_FILENO;
+	pipe_id[1] = STDOUT_FILENO;
 	while (index < data->cmd->len)
 	{
-
-		if (index != data->cmd->len - 1)
-			safe_pipe(pipe_id);
-		else
-			pipe_id[PIPE_WRITE] = STDOUT_FILENO;
-
-		pid = safe_fork();
-
-		// child
-		if (pid == 0)
-		{
-			if (index != data->cmd->len - 1)
-				safe_close(pipe_id[PIPE_READ]);
-			child(data, index, (int32_t []){read_fd, pipe_id[PIPE_WRITE]});
-		}
-
-		// parent
-		else
-		{
-			if (index != 0)
-				safe_close(read_fd);
-			if (index != data->cmd->len - 1)
-				safe_close(pipe_id[PIPE_WRITE]);
-			read_fd = pipe_id[PIPE_READ];
-		}
-
-		index++;
-	}
-
-	return (wait_child(pid));
-}
-
-static uint8_t	redir_heredoc(
-	t_str content,
-	int32_t pipes[2]
-) {
-	int32_t	pipe_id[2];
-
-	safe_pipe(pipe_id);
-	safe_close(pipes[PIPE_READ]);
-
-	if (write(pipe_id[PIPE_WRITE], content.get, content.len) < 0)
-	{
-		perror("could not write to heredoc");
-		safe_close(pipe_id[PIPE_WRITE]);
-		return (EXIT_FAILURE);
-	}
-
-	pipes[PIPE_READ] = pipe_id[PIPE_READ];
-	safe_close(pipe_id[PIPE_WRITE]);
-
-	return (EXIT_SUCCESS);
-}
-
-static uint8_t	redir_file(
-	t_str file, 
-	int32_t flags, 
-	int32_t	pipes[2]
-) {
-	int32_t	fd;
-
-	fd = open(file.get, flags, S_IWUSR | S_IRUSR);
-	if (flags == (F_IN))
-	{
-		safe_close(pipes[PIPE_READ]);
-		pipes[PIPE_READ] = fd;
-	}
-	else
-	{
-		safe_close(pipes[PIPE_WRITE]);
-		pipes[PIPE_WRITE] = fd;
-	}
-	if (fd < 0)
-	{
-		perror(file.get);
-		if (flags == (F_IN))
-			safe_close(pipes[PIPE_WRITE]);
-		else
-			safe_close(pipes[PIPE_READ]);
-		return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
-
-static uint8_t	redir(t_cmd cmd, int32_t pipes[2])
-{
-	size_t	index;
-	t_str	*redir;
-	t_str	content;
-	
-	index = 0;
-	while (index < cmd.redir->len)
-	{
-		redir = vptr_get_ptr(t_str, cmd.redir, index);
-		content = *(redir + 1);
-
-		if (str_eq(*redir, REDIR_HEREDOC) && redir_heredoc(content, pipes))
+		if (fork_loop(&index, pipe_id, data, &read_fd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		else if (str_eq(*redir, REDIR_IN))
-		{
-			if (redir_file(content, F_IN, pipes))
-				return (EXIT_FAILURE);
-		}
-		else if (str_eq(*redir, REDIR_APPEND))
-		{
-			if (redir_file(content, F_APPEND, pipes))
-				return (EXIT_FAILURE);
-		}
-		else if (str_eq(*redir, REDIR_OUT))
-		{
-			if (redir_file(content, F_OUT, pipes))
-				return (EXIT_FAILURE);
-		}
-
-		index += 2;
 	}
-
-	return (EXIT_SUCCESS);
+	return (wait_child(pid));
 }
 
 static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2])
@@ -224,24 +137,19 @@ static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2])
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-
 	cmd = vptr_get(t_cmd, data->cmd, index);
 	builtin_type = builtin_get(cmd.arg[0]);
-
 	if (redir(cmd, redirs) == EXIT_FAILURE)
 		safe_exit(EXIT_FAILURE);
-
 	if (redirs[PIPE_READ] != STDIN_FILENO && builtin_type == BUILTIN_NONE)
 	{
 		safe_dup2(redirs[PIPE_READ], STDIN_FILENO);
 		safe_close(redirs[PIPE_READ]);
 	}
-
 	if (redirs[PIPE_WRITE] != STDOUT_FILENO && builtin_type == BUILTIN_NONE)
 	{
 		safe_dup2(redirs[PIPE_WRITE], STDOUT_FILENO);
 		safe_close(redirs[PIPE_WRITE]);
 	}
-
 	safe_exit(safe_exec(data, cmd, redirs));
 }

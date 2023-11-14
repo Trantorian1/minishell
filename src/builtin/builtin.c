@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 18:42:35 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:00:50 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:26:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <stdlib.h>
 
+#include "builtin_get.h"
 #include "d_pipe.h"
 #include "dynamic/string.h"
 #include "builtin_none.h"
@@ -40,17 +41,17 @@ static f_builtin	g_builtins[E_BUILTIN_SIZE] = {
 };
 
 uint8_t	builtin(
-	t_data *_Nonnull data, 
-	t_cmd cmd, 
-	t_builtin type, 
+	t_data *_Nonnull data,
+	t_cmd cmd,
 	int32_t *_Nonnull pipe_fd,
 	bool in_child
 ) {
-	uint8_t	err_code;
+	uint8_t		err_code;
+	t_builtin	type;
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-
+	type = builtin_get(cmd.arg[0]);
 	err_code = g_builtins[type](data, cmd, pipe_fd, in_child);
 	safe_close(pipe_fd[PIPE_READ]);
 	safe_close(pipe_fd[PIPE_WRITE]);

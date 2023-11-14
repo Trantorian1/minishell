@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 06:58:28 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 06:59:46 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:46:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ uint8_t	tokenise_prev(
 ) {
 	if (vptr == NULL)
 		return (EXIT_FAILURE);
-
 	if (i_prev != i_curr)
 		vstr_append(vptr, str_substr(input, i_prev, i_curr));
-
 	return (EXIT_SUCCESS);
 }

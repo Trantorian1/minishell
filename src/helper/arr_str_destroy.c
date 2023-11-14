@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 00:17:52 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:20:16 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:34:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	arr_str_destroy(t_cstr _Nonnull *_Nullable arr)
 
 	if (arr == NULL)
 		return ;
-
 	index = 0;
 	while (arr[index] != NULL)
 	{

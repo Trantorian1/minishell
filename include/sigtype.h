@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 03:28:53 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 03:38:56 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:43:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@
 
 # define SIGNONE 0
 
-extern uint8_t	sigtype;
+extern uint8_t	g_sigtype;
 
 #endif

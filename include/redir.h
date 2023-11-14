@@ -1,37 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   redir.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 18:29:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:25:17 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/14 13:12:00 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/14 13:20:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#ifndef REDIR_HEREDOC_H
+# define REDIR_HEREDOC_H
 
 # include <stdint.h>
-# include <stdbool.h>
-
-# include "e_builtin.h"
 # include "s_cmd.h"
-# include "s_data.h"
 
-typedef uint8_t	(*f_builtin)(
-	t_data *_Nonnull data, 
-	t_cmd cmd, 
-	int32_t *_Nonnull pipe_fd,
-	bool in_child
-);
-
-uint8_t	builtin(
-	t_data *_Nonnull data, 
-	t_cmd cmd, 
-	int32_t *_Nonnull pipe_fd,
-	bool in_child
-);
+uint8_t	redir(t_cmd cmd, int32_t *_Nonnull pipes);
 
 #endif

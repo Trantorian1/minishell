@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:36:36 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 13:59:43 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:42:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int32_t	safe_pipe(int32_t pipefd[2])
 	error = pipe(pipefd);
 	if (error == 0)
 		return (0);
-	
 	safe_free_all();
 	safe_exit(EXIT_FAILURE);
 }

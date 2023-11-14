@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 00:01:44 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 03:33:46 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:43:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	sig_exec(void)
 static void	handle_sigint(int32_t sig)
 {
 	(void)sig;
-
 	write(STDOUT_FILENO, "\n", 1);
 }
 

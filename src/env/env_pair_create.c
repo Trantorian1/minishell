@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:00:56 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 22:47:37 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:32:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,14 @@ t_env_pair	env_pair_create(t_cstr _Nonnull pair)
 	size_t		match;
 
 	if (pair == NULL)
-		return ((t_env_pair){ {0}, {0} });
-
+		return ((t_env_pair){{0}, {0}});
 	src = str_create(pair);
 	match = str_find_char(src, '=');
-	
 	if (match == src.len)
 	{
 		str_destroy(&src);
-		return ((t_env_pair){ {0}, {0} });
+		return ((t_env_pair){{0}, {0}});
 	}
-
 	env_pair.key = str_substr(src, 0, match);
 	env_pair.val = str_substr(src, match + 1, src.len);
 	str_destroy(&src);
@@ -47,7 +44,6 @@ t_env_pair	env_pair_create(t_cstr _Nonnull pair)
 		str_rm(&env_pair.key, 0, env_pair.key.len);
 		str_rm(&env_pair.val, 0, env_pair.val.len);
 	}
-
 	return (env_pair);
 }
 
@@ -58,7 +54,6 @@ static inline bool	validate(t_str key)
 
 	if (!is_letter(key.get[0]) && key.get[0] != '_')
 		return (false);
-
 	index = 1;
 	while (index < key.len)
 	{
@@ -67,6 +62,5 @@ static inline bool	validate(t_str key)
 			return (false);
 		index++;
 	}
-
 	return (true);
 }

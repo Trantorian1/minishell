@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 22:44:23 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 23:25:55 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 12:00:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ uint8_t	state_unquote(t_data *_Nonnull data)
 {
 	if (data == NULL)
 		return (EXIT_FAILURE);
-
 	if (unquote_impl(data->arg) || unquote_impl(data->redir))
 		return (EXIT_FAILURE);
-
 	return (EXIT_SUCCESS);
 }
 
@@ -40,22 +38,18 @@ static size_t	vstr_unquote(t_vptr *_Nonnull vstr, size_t index)
 
 	if (vstr == NULL)
 		return (EXIT_FAILURE);
-
 	content = str_create("");
 	str_curr = vptr_get(t_str, vstr, index);
-	while (
-		index < vstr->len
-		&& !str_eq(str_curr, WHITESPACE) 
-		&& !str_eq(str_curr, PIPE)
-	) {
+	while (index < vstr->len
+		&& !str_eq(str_curr, WHITESPACE)
+		&& !str_eq(str_curr, PIPE))
+	{
 		if (!str_eq(str_curr, QUOTE_SINGLE) && !str_eq(str_curr, QUOTE_DOUBLE))
 			str_append_str(&content, vptr_get(t_str, vstr, index).get);
-
 		vstr_rm(vstr, index);
 		str_curr = vptr_get(t_str, vstr, index);
 	}
 	vstr_insert(vstr, content, index);
-
 	return (EXIT_SUCCESS);
 }
 
@@ -66,7 +60,6 @@ static uint8_t	unquote_impl(t_vptr *_Nonnull vstr)
 
 	if (vstr == NULL)
 		return (EXIT_FAILURE);
-
 	index = 0;
 	while (index < vstr->len)
 	{
@@ -80,6 +73,5 @@ static uint8_t	unquote_impl(t_vptr *_Nonnull vstr)
 		else
 			vstr_rm(vstr, index);
 	}
-	
 	return (EXIT_SUCCESS);
 }

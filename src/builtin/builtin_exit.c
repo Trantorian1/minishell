@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 19:10:37 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 01:42:56 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:29:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,16 @@
 #include "d_pipe.h"
 
 uint8_t	builtin_exit(
-	t_data *_Nonnull data, 
-	t_cmd cmd, 
+	t_data *_Nonnull data,
+	t_cmd cmd,
 	int32_t *_Nonnull pipe_fd,
 	bool in_child
 ) {
 	int64_t	code;
 
 	(void)pipe_fd;
-
 	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);
-
 	code = data->exit_code;
 	if (cmd.arg[1] != NULL)
 	{
@@ -49,7 +47,6 @@ uint8_t	builtin_exit(
 		else if (cmd.arg[2] != NULL)
 			error_display("exit", "too many arguments");
 	}
-
 	if (in_child == false)
 		write(pipe_fd[PIPE_WRITE], "exit\n", 5);
 	if (cmd.arg[1] == NULL || cmd.arg[2] == NULL || code == 2)
@@ -58,6 +55,5 @@ uint8_t	builtin_exit(
 		safe_close(pipe_fd[PIPE_READ]);
 		safe_exit((uint8_t)code);
 	}
-
 	return (EXIT_FAILURE);
 }

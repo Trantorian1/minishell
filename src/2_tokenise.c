@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:42:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:07:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:46:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@
 #include "tokenise_whitespace.h"
 
 static inline uint8_t	tokenise_arg(
-	t_data *_Nonnull data, 
-	t_str input
-);
+							t_data *_Nonnull data,
+							t_str input
+							);
 
 uint8_t	state_tokenise(t_data *_Nonnull data)
 {
@@ -41,17 +41,12 @@ uint8_t	state_tokenise(t_data *_Nonnull data)
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-
 	line = vptr_get(t_str, data->user_input, data->index_line);
-
 	data->arg = vptr_create(t_str, 0);
 	data->redir = vptr_create(t_str, 0);
-
 	if (tokenise_arg(data, line) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-
 	data->index_line++;
-
 	return (EXIT_SUCCESS);
 }
 
@@ -88,7 +83,7 @@ static inline uint8_t	tokenise_loop(
 }
 
 static inline uint8_t	tokenise_arg(
-	t_data *_Nonnull data, 
+	t_data *_Nonnull data,
 	t_str input
 ) {
 	size_t	i[2];
@@ -96,7 +91,6 @@ static inline uint8_t	tokenise_arg(
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-
 	i[PREV] = 0;
 	i[CURR] = 0;
 	command = false;
@@ -106,7 +100,6 @@ static inline uint8_t	tokenise_arg(
 			return (EXIT_FAILURE);
 	}
 	tokenise_prev(data->arg, input, i[PREV], i[CURR]);
-
 	if (str_eq(vptr_get(t_str, data->arg, data->arg->len - 1), PIPE))
 		return (error_display("pipe", "unterminated pipe"));
 	return (EXIT_SUCCESS);

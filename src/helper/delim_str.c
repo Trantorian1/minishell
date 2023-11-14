@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:19:29 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/23 13:23:30 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:34:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,5 @@ t_cstr _Nonnull	delim_str(t_str str)
 		return ("QUOTE_DOUBLE");
 	else if (str_eq(str, WHITESPACE))
 		return ("WHITESPACE");
-
 	return (str.get);
 }

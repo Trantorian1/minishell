@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 12:28:08 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:45:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,10 @@ uint8_t	state_parse(t_data *_Nonnull data)
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-
 	user_input = input_get(PROMPT_DEFAULT);
 	if (user_input == NULL)
 		return (EXIT_FAILURE);
-
 	data->user_input = user_input;
 	data->index_line = 0;
-
 	return (EXIT_SUCCESS);
 }

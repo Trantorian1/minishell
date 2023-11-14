@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:14:27 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 13:59:43 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:42:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,5 @@ pid_t	safe_fork(void)
 		safe_free_all();
 		safe_exit(EXIT_FAILURE);
 	}
-
 	return (fid);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 03:15:42 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 04:29:50 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:42:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,5 @@ int32_t	safe_dup(int32_t fd)
 		perror("dup");
 		safe_exit(EXIT_FAILURE);
 	}
-
 	return (fd_new);
 }

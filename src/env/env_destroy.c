@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:38:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/24 17:42:15 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:31:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	env_destroy(t_vptr *_Nullable env)
 
 	if (env == NULL)
 		return ;
-
 	index = 0;
 	while (index < env->len)
 	{

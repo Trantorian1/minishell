@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 15:06:26 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/12 20:24:55 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:43:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-static int32_t	decode_status(int32_t);
+static int32_t	decode_status(int32_t status);
 
 uint8_t	wait_child(pid_t pid_last)
 {
@@ -37,7 +37,6 @@ uint8_t	wait_child(pid_t pid_last)
 		else if (pid == pid_last)
 			status_last = (uint8_t)decode_status(status);
 	}
-
 	return (status_last);
 }
 

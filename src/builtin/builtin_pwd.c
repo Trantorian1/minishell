@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 20:53:38 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:47:34 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:30:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,12 @@ uint8_t	builtin_pwd(
 	(void)data;
 	(void)cmd;
 	(void)in_child;
-
 	if (getcwd(cwd, 2048) == NULL)
 	{
 		perror("getcwd");
 		return (EXIT_FAILURE);
 	}
-
 	write(pipe_fd[PIPE_WRITE], cwd, cstr_len(cwd));
 	write(pipe_fd[PIPE_WRITE], "\n", 1);
-
 	return (EXIT_SUCCESS);
 }

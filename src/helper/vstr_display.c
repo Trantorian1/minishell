@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:14:29 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 10:02:14 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:42:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,8 @@ void	vstr_display(t_vptr *_Nonnull vstr)
 
 	if (vstr == NULL)
 		return ;
-
 	index = 0;
 	display = str_create("");
-
 	while (index < vstr->len)
 	{
 		str_append_char(&display, '\'');
@@ -42,8 +40,6 @@ void	vstr_display(t_vptr *_Nonnull vstr)
 		str_append_char(&display, '\n');
 		index++;
 	}
-
 	write(STDOUT_FILENO, display.get, display.len);
-
 	str_destroy(&display);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 13:46:08 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:06:41 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:43:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ uint8_t	main_loop(t_data *_Nonnull data)
 			state_expand(data);
 			state_unquote(data);
 			state_collect(data);
-			if (sigtype != SIGINT)
+			if (g_sigtype != SIGINT)
 			{
 				sig_exec();
 				state_exec(data);
 				sig_main();
 			}
-			sigtype = SIGNONE;
+			g_sigtype = SIGNONE;
 
 			state_cleanup(data);
 		}

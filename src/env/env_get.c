@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:20:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 20:20:17 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:31:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,14 @@ t_str	env_get(t_vptr *_Nonnull env, t_cstr _Nonnull key)
 	t_env_pair	pair;
 
 	if (env == NULL || key == NULL)
-		return ((t_str){ 0, "", 0 });
-
+		return ((t_str){0, "", 0});
 	index = 0;
 	while (index < env->len)
 	{
 		pair = vptr_get(t_env_pair, env, index);
 		if (str_eq(pair.key, key))
 			return (pair.val);
-
 		index++;
 	}
-
-	return ((t_str){ 0, "", 0 });
+	return ((t_str){0, "", 0});
 }

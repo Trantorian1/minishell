@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 17:19:07 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:05:10 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:42:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,13 @@ uint8_t	safe_exec(
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-
 	if (cmd.arg[0] == NULL)
 		return (EXIT_SUCCESS);
-
 	builtin_type = builtin_get(cmd.arg[0]);
-
 	if (builtin_type != BUILTIN_NONE)
-		return (builtin(data, cmd, builtin_type, pipe_fd, true));
+		return (builtin(data, cmd, pipe_fd, true));
 	else
 		execve(cmd.arg[0], cmd.arg, env_collect(data->env));
-
 	error_display(cmd.arg[0], "command not found");
 	safe_exit(ENOTFOUD);
 }

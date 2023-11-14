@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 03:27:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 04:24:57 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 11:43:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 #include "sigtype.h"
 
-uint8_t	sigtype = SIGNONE;
+uint8_t	g_sigtype = SIGNONE;
 
 static void	handle_sigint(int32_t sig);
 
@@ -38,7 +38,6 @@ void	sig_heredoc(void)
 static void	handle_sigint(int32_t sig)
 {
 	(void)sig;
-
 	close(STDIN_FILENO);
-	sigtype = SIGINT;
+	g_sigtype = SIGINT;
 }
