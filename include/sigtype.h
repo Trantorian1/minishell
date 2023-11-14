@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sig_main.h                                         :+:      :+:    :+:   */
+/*   sigtype.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 23:43:48 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 03:29:18 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/14 03:28:53 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/14 03:38:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIG_MAIN_H
-# define SIG_MAIN_H
+#ifndef SIGTYPE_H
+# define SIGTYPE_H
 
-void	sig_main(void);
+# include <stdint.h>
+
+# define SIGNONE 0
+
+extern uint8_t	sigtype;
 
 #endif

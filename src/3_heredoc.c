@@ -6,18 +6,27 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:39:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 04:35:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error_display.h"
+#include "safe_close.h"
+#include "safe_dup.h"
+#include "safe_dup2.h"
+#include "sig_heredoc.h"
+#include "sig_main.h"
+#include "sigtype.h"
 #include "state_heredoc.h"
 
+#include <readline/readline.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <signal.h>
 
 #include "dynamic/vector.h"
 #include "dynamic/string.h"
@@ -52,10 +61,10 @@ uint8_t	state_heredoc(t_data *_Nonnull data)
 
 		if (str_eq(redir_curr, HEREDOC))
 		{
-			index++;
+			index += 2;
 			delimiter = delimiter_get(data->redir, index);
-
 			content = heredoc_content(data, data->redir, delimiter, index);
+
 			vstr_insert(data->redir, content, index);
 			str_destroy(&delimiter);
 
@@ -102,21 +111,27 @@ static t_str	heredoc_content(
 	t_str	content;
 	t_str	line;
 	t_vptr	*input;
+	int32_t	stdin_prev;
 
 	if (redir == NULL || i_curr >= redir->len)
 		return (str_create(""));
 
 	content = str_create("");
+	stdin_prev = dup(STDIN_FILENO);
+	sig_heredoc();
 
+	sigtype = SIGNONE;
 	while(true)
 	{
 		if (data->index_line == data->user_input->len)
 		{
 			input = input_get("> ");
+			if (sigtype == SIGINT)
+				break ;
 			if (input == NULL)
 			{
 				error_display("heredoc", "eof encountered");
-				return (content);
+				break ;
 			}
 			if (input->len == 0)
 			{
@@ -140,6 +155,14 @@ static t_str	heredoc_content(
 			str_append_char(&content, '\n');
 			data->index_line++;
 		}
+	}
+
+	sig_main();
+	if (sigtype == SIGINT)
+	{
+		safe_dup2(stdin_prev, STDIN_FILENO);
+		safe_close(stdin_prev);
+		write(STDIN_FILENO, "\n", 1);
 	}
 
 	return (content);

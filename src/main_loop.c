@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 13:46:08 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:10:47 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 04:13:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include "sigtype.h"
 #include "state_parse.h"
 #include "state_tokenise.h"
 #include "state_heredoc.h"
@@ -48,9 +49,12 @@ void		main_loop(t_data *_Nonnull data)
 			state_unquote(data);
 			state_collect(data);
 
-			sig_exec();
-			state_exec(data);
-			sig_main();
+			if (sigtype != SIGINT)
+			{
+				sig_exec();
+				state_exec(data);
+				sig_main();
+			}
 
 			state_cleanup(data);
 		}

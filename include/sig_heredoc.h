@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sig_main.h                                         :+:      :+:    :+:   */
+/*   sig_heredoc.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 23:43:48 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 03:29:18 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/14 03:24:59 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/14 03:26:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIG_MAIN_H
-# define SIG_MAIN_H
+#ifndef SIG_HEREDOC_H
+# define SIG_HEREDOC_H
 
-void	sig_main(void);
+# include <stdint.h>
+
+void	sig_heredoc(void);
 
 #endif

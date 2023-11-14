@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:57:21 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 02:11:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int32_t		main(int32_t argc, t_cstr *argv, t_cstr *envp)
 	env_destroy(data.env);
 	state_reset(&data);
 
+	safe_free_all();
 	rl_clear_history();
 
-	return (EXIT_SUCCESS);
+	return (data.exit_code);
 }

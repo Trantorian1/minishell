@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:33:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:43:53 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/14 01:32:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ static bool	has_option_n(t_cstr _Nonnull arg)
 {
 	size_t	index;
 
-	if (arg == NULL || (arg[0] != '-' && arg[1] != 'n') || arg[1] == '\0')
+	if (arg == NULL || arg[0] != '-')
 		return (false);
 
-	index = 2;
+	index = 1;
 	while (arg[index] == 'n')
 		index++;
 	
