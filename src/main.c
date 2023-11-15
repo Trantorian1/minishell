@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/15 19:39:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 20:54:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <unistd.h>
 
 #include "data_get.h"
+#include "s_env.h"
 #include "state_parse.h"
 #include "state_tokenise.h"
 #include "state_heredoc.h"
@@ -43,8 +44,6 @@ int32_t	main(int32_t argc, t_cstr *argv, t_cstr *envp)
 {
 	t_data	*data;
 
-	printf("%p\n", (void *)envp);
-	printf("%p\n", (void *)envp[0]);
 	data = data_get();
 	(void)argc;
 	(void)argv;
