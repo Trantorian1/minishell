@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 15:17:04 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:02:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static uint8_t	check_for_builtin(t_data *_Nonnull data)
 		return (fork_commands(data));
 }
 
-static uint8_t	fork_loop(
+static int32_t	fork_loop(
 	size_t *_Nonnull index,
 	int32_t *_Nonnull pipe_id,
 	t_data *_Nonnull data,
@@ -107,24 +107,25 @@ static uint8_t	fork_loop(
 		*read_fd = pipe_id[PIPE_READ];
 	}
 	(*index)++;
-	return (EXIT_SUCCESS);
+	return (pid);
 }
 
 static uint8_t	fork_commands(t_data *_Nonnull data)
 {
 	size_t	index;
 	int32_t	read_fd;
-	int32_t	pipe_id[2];
 	int32_t	pid;
+	int32_t	pipe_id[2];
 
 	index = 0;
 	read_fd = STDIN_FILENO;
-	pid = 0;
 	pipe_id[0] = STDIN_FILENO;
 	pipe_id[1] = STDOUT_FILENO;
+	pid = 0;
 	while (index < data->cmd->len)
 	{
-		if (fork_loop(&index, pipe_id, data, &read_fd) == EXIT_FAILURE)
+		pid = fork_loop(&index, pipe_id, data, &read_fd);
+		if (pid == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 	}
 	return (wait_child(pid));
