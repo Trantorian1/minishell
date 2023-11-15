@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 16:57:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 15:07:28 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:47:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_vptr *_Nullable	env_create(t_cstr _Nonnull *_Nonnull cstr_env)
 	t_env_pair	pair;
 	size_t		index;
 
-	if (cstr_env == NULL || *cstr_env == NULL)
+	if (cstr_env == NULL)
 		return (NULL);
 	env = vptr_create(sizeof(t_env_pair), 0);
 	index = 0;
