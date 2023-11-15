@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   9_reset.c                                          :+:      :+:    :+:   */
+/*   d_str.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 13:52:56 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 13:26:14 by marvin           ###   ########.fr       */
+/*   Created: 2023/08/10 14:16:31 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/15 17:13:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "state_reset.h"
+#ifndef D_STR_H
+# define D_STR_H
 
-#include "dynamic/vector.h"
+# define PROMPT_DEFAULT "minishell: "
+# define PROMPT_HEREDOC "> "
+# define HEREDOC "<<"
 
-void	state_reset(t_data *_Nonnull data)
-{
-	if (data == NULL)
-		return ;
-	vstr_destroy(data->user_input);
-	data->user_input = NULL;
-	data->index_line = 0;
-}
+# define PIPE (char[]) {-128, '\0'}
+# define QUOTE_SINGLE (char[]) {-127, '\0'}
+# define QUOTE_DOUBLE (char[]) {-126, '\0'}
+# define WHITESPACE (char[]) {-125, '\0'}
+
+# define REDIR_HEREDOC "<<"
+# define REDIR_IN "<"
+# define REDIR_APPEND ">>"
+# define REDIR_OUT ">"
+
+#endif

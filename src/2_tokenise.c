@@ -6,12 +6,13 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:42:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 15:11:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 18:17:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "state_tokenise.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -30,10 +31,7 @@
 #include "tokenise_redir.h"
 #include "tokenise_whitespace.h"
 
-static inline uint8_t	tokenise_arg(
-							t_data *_Nonnull data,
-							t_str input
-							);
+static inline uint8_t	tokenise_arg(t_data *_Nonnull data, t_str input);
 
 uint8_t	state_tokenise(t_data *_Nonnull data)
 {

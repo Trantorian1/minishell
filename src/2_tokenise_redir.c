@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 08:41:32 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:53:58 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 18:19:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,8 @@
 #include "tokenise_whitespace.h"
 #include <stdlib.h>
 
-static inline uint8_t	tokenise_redir_impl(
-							t_data *_Nonnull data,
-							size_t *_Nonnull store,
-							t_str input
-							);
+static inline uint8_t	tokenise_redir_impl(t_data *_Nonnull data,
+							size_t *_Nonnull store, t_str input);
 
 uint8_t	tokenise_redir(
 	t_data *_Nonnull data,
@@ -68,16 +65,6 @@ static inline uint8_t	redir_loop(
 			return (EXIT_FAILURE);
 		*command = true;
 	}
-	else if (input.get[i[CURR]] == '|')
-	{
-		if (tokenise_pipe(data, i, command, input))
-			return (EXIT_FAILURE);
-	}
-	else if (is_whitespace(input.get[i[CURR]]))
-	{
-		if (tokenise_whitespace(data->redir, i, command, input))
-			return (EXIT_FAILURE);
-	}
 	else
 		i[CURR]++;
 	return (EXIT_SUCCESS);
@@ -93,7 +80,7 @@ static inline uint8_t	tokenise_redir_impl(
 	uint8_t	command;
 
 	if (data->redir == NULL || store == NULL || *store + 1 >= input.len)
-		return (EXIT_FAILURE);
+		return (error_display("redir", "no content to redirection"));
 	len = 1 + (input.get[*store] == input.get[*store + 1]);
 	if (input.get[*store + len] == '>' || input.get[*store + len] == '<')
 		return (error_display("redir", "invalid redirection"));
@@ -107,6 +94,8 @@ static inline uint8_t	tokenise_redir_impl(
 		if (redir_loop(input, &command, i, data) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 	}
+	if (command == false && i[PREV] == i[CURR])
+		return (error_display("redir", "no content to redirection"));
 	tokenise_prev(data->redir, input, i[PREV], i[CURR]);
 	vstr_append(data->redir, str_create(WHITESPACE));
 	*store = i[CURR];
