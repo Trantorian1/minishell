@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:39:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 15:12:40 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:22:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,8 @@
 
 #include "d_str.h"
 
-static inline t_str	heredoc_content(
-						t_data *_Nonnull data,
-						t_vptr *_Nonnull redir,
-						t_str delimiter,
-						size_t i_curr
-						);
+static inline t_str	heredoc_content(t_data *_Nonnull data,
+						t_vptr *_Nonnull redir, t_str delimiter, size_t i_curr);
 
 uint8_t	state_heredoc(t_data *_Nonnull data)
 {
@@ -79,7 +75,7 @@ static inline uint8_t	update_input(t_data *_Nonnull data)
 		return (EXIT_FAILURE);
 	if (input == NULL)
 	{
-		error_display("heredoc", "eof encountered");
+		error_display("heredoc", "eof encountered", 0);
 		return (EXIT_FAILURE);
 	}
 	if (input->len != 0)

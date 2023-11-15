@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:42:51 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 13:28:09 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:25:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <signal.h>
 #include <unistd.h>
 
+#include "data_get.h"
 #include "state_parse.h"
 #include "state_tokenise.h"
 #include "state_heredoc.h"
@@ -40,25 +41,19 @@
 
 int32_t	main(int32_t argc, t_cstr *argv, t_cstr *envp)
 {
-	static t_data	data = {
-		.exit_code = EXIT_SUCCESS,
-		.should_exit = false,
-		.index_line = 0,
-		.user_input = NULL,
-		.arg = NULL,
-		.redir = NULL,
-	};
+	t_data	*data;
 
+	data = data_get();
 	(void)argc;
 	(void)argv;
-	data.env = (t_vptr * _Nonnull)env_create(envp);
-	if (main_loop(&data) == EXIT_FAILURE)
+	data->env = (t_vptr * _Nonnull)env_create(envp);
+	if (main_loop(data) == EXIT_FAILURE)
 		printf("exit\n");
 	rl_clear_history();
-	state_cleanup(&data);
-	env_destroy(data.env);
-	state_reset(&data);
+	state_cleanup(data);
+	env_destroy(data->env);
+	state_reset(data);
 	safe_free_all();
 	rl_clear_history();
-	return (data.exit_code);
+	return (data->exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:27:16 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 15:09:09 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:23:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_vptr *_Nullable	env_update(t_vptr *_Nonnull env, t_cstr _Nonnull cstr)
 	pair_new = env_pair_create(cstr);
 	if (pair_new.key.len == 0)
 	{
-		error_display("export", "invalid identifier");
+		error_display("export", "invalid identifier", 1);
 		return ((void)env_pair_destroy(&pair_new), NULL);
 	}
 	index = (size_t)(-1);

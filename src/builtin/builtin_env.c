@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 19:56:11 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 15:05:54 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:18:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ uint8_t	builtin_env(
 	if (data == NULL || pipe_fd == NULL)
 		return (EXIT_FAILURE);
 	if (cmd.arg[1] != NULL)
-		error_display("env", "too many arguments");
+		return (error_display("env", "too many arguments", 1));
 	index = 0;
 	while (index < data->env->len)
 	{

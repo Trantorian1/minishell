@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 06:54:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:46:49 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:12:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ uint8_t	tokenise_quote(
 		return (EXIT_FAILURE);
 	tokenise_prev(vptr, input, i[PREV], i[CURR]);
 	if (tokenise_quote_impl(vptr, &i[CURR], input, c))
-		return (error_display("' or \"", "unterminated quote"));
+		return (error_display("' or \"", "unterminated quote", 2));
 	i[PREV] = i[CURR];
 	return (EXIT_SUCCESS);
 }

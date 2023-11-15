@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:42:46 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/15 18:17:47 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:11:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,6 @@ static inline uint8_t	tokenise_arg(
 	}
 	tokenise_prev(data->arg, input, i[PREV], i[CURR]);
 	if (str_eq(*(t_str *)vptr_get(data->arg, data->arg->len - 1), PIPE))
-		return (error_display("pipe", "unterminated pipe"));
+		return (error_display("pipe", "unterminated pipe", 2));
 	return (EXIT_SUCCESS);
 }

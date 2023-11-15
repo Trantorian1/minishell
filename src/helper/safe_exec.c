@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 17:19:07 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:42:31 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:12:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ uint8_t	safe_exec(
 		return (builtin(data, cmd, pipe_fd, true));
 	else
 		execve(cmd.arg[0], cmd.arg, env_collect(data->env));
-	error_display(cmd.arg[0], "command not found");
+	error_display(cmd.arg[0], "command not found", 127);
 	safe_exit(ENOTFOUD);
 }

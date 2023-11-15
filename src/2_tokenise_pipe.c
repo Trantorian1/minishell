@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 07:34:17 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:46:19 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:25:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ uint8_t	tokenise_pipe(
 	t_str input
 ) {
 	if (i[PREV] == i[CURR] && command == false)
-		return (error_display("pipe", "unterminated pipe"));
+		return (error_display("pipe", "unterminated pipe", 2));
 	i[CURR] = tokenise_pipe_impl(data->arg, data->redir, input, i[CURR]);
 	i[PREV] = i[CURR];
 	command = false;

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 15:56:15 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/15 18:25:49 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:13:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static inline bool	no_fuckery(t_cstr _Nullable input)
 		index++;
 	if (input[index] != '\0')
 	{
-		error_display("input", "no hexadecimal fuckery allowed");
+		error_display("input", "no hexadecimal fuckery allowed", 2);
 		return (false);
 	}
 	else

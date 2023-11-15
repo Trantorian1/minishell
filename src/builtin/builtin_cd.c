@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:51:57 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:28:26 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:18:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ uint8_t	builtin_cd(
 		else
 			return (cd_to(cmd.arg[1], data->env));
 	}
-	error_display("cd", "too many arguments");
+	error_display("cd", "too many arguments", 1);
 	return (EXIT_FAILURE);
 }
 
@@ -87,7 +87,7 @@ static void	update_env(
 
 static uint8_t	cd_no_home(void)
 {
-	error_display("cd", "HOME not set");
+	error_display("cd", "HOME not set", 1);
 	return (EXIT_FAILURE);
 }
 

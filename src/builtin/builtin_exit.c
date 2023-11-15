@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 19:10:37 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:29:46 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:19:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ uint8_t	builtin_exit(
 	{
 		code = 2;
 		if (cstr_to_i64(cmd.arg[1], &code) == EXIT_FAILURE)
-			error_display("exit", "numeric argument required");
+			error_display("exit", "numeric argument required", 2);
 		else if (cmd.arg[2] != NULL)
-			error_display("exit", "too many arguments");
+			error_display("exit", "too many arguments", 2);
 	}
 	if (in_child == false)
 		write(pipe_fd[PIPE_WRITE], "exit\n", 5);

@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_display.h                                    :+:      :+:    :+:   */
+/*   data_get.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/12 12:02:54 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/15 19:11:10 by marvin           ###   ########.fr       */
+/*   Created: 2023/11/15 19:06:53 by marvin            #+#    #+#             */
+/*   Updated: 2023/11/15 19:07:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_DISPLAY_H
-# define ERROR_DISPLAY_H
+#include "data_get.h"
+#include <stdlib.h>
 
-# include <stdint.h>
-# include "dynamic/string.h"
+t_data *_Nonnull	data_get(void)
+{
+	static t_data	data = {
+		.exit_code = EXIT_SUCCESS,
+		.should_exit = false,
+		.index_line = 0,
+		.user_input = NULL,
+		.arg = NULL,
+		.redir = NULL,
+	};
 
-uint8_t	error_display(t_cstr _Nonnull cmd, t_cstr _Nonnull err, uint8_t code);
-
-#endif
+	return (&data);
+}

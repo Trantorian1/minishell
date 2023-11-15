@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 08:41:32 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/15 18:19:59 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 19:24:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ static inline uint8_t	tokenise_redir_impl(
 	uint8_t	command;
 
 	if (data->redir == NULL || store == NULL || *store + 1 >= input.len)
-		return (error_display("redir", "no content to redirection"));
+		return (error_display("redir", "no content to redirection", 2));
 	len = 1 + (input.get[*store] == input.get[*store + 1]);
 	if (input.get[*store + len] == '>' || input.get[*store + len] == '<')
-		return (error_display("redir", "invalid redirection"));
+		return (error_display("redir", "invalid redirection", 2));
 	vstr_append(data->redir, str_substr(input, *store, *store + len));
 	vstr_append(data->redir, str_create(WHITESPACE));
 	i[CURR] = skip_whitespace(input, *store + len);
@@ -95,7 +95,7 @@ static inline uint8_t	tokenise_redir_impl(
 			return (EXIT_FAILURE);
 	}
 	if (command == false && i[PREV] == i[CURR])
-		return (error_display("redir", "no content to redirection"));
+		return (error_display("redir", "no content to redirection", 2));
 	tokenise_prev(data->redir, input, i[PREV], i[CURR]);
 	vstr_append(data->redir, str_create(WHITESPACE));
 	*store = i[CURR];
