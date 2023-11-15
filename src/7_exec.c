@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 03:04:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/15 19:02:16 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 21:23:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,10 @@ static uint8_t	check_for_builtin(t_data *_Nonnull data)
 	int32_t		redirs[2];
 
 	cmd = *(t_cmd *)vptr_get(data->cmd, 0);
-	builtin_type = builtin_get(cmd.arg[0]);
+	if (cmd.arg == NULL)
+		builtin_type = BUILTIN_NONE;
+	else
+		builtin_type = builtin_get(cmd.arg[0]);
 	if (builtin_type != BUILTIN_NONE)
 	{
 		redirs[0] = STDIN_FILENO;
@@ -139,7 +142,10 @@ static uint8_t	child(t_data *_Nonnull data, size_t index, int32_t redirs[2])
 	if (data == NULL)
 		return (EXIT_FAILURE);
 	cmd = *(t_cmd *)vptr_get(data->cmd, index);
-	builtin_type = builtin_get(cmd.arg[0]);
+	if (cmd.arg != NULL)
+		builtin_type = builtin_get(cmd.arg[0]);
+	else
+		builtin_type = BUILTIN_NONE;
 	if (redir(cmd, redirs) == EXIT_FAILURE)
 		safe_exit(EXIT_FAILURE);
 	if (redirs[PIPE_READ] != STDIN_FILENO && builtin_type == BUILTIN_NONE)

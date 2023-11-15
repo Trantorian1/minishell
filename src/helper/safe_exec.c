@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 17:19:07 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/15 19:12:37 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 21:24:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ uint8_t	safe_exec(
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
-	if (cmd.arg[0] == NULL)
+	if (cmd.arg == NULL || cmd.arg[0] == NULL)
 		return (EXIT_SUCCESS);
 	builtin_type = builtin_get(cmd.arg[0]);
 	if (builtin_type != BUILTIN_NONE)

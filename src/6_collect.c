@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 01:00:05 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 15:16:34 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 21:21:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ static uint8_t	collect_arg(t_data *_Nonnull data)
 
 	if (data == NULL)
 		return (EXIT_FAILURE);
+	if (data->arg->len == 0)
+		vptr_append(data->cmd, (t_cmd []){(t_cmd){NULL, NULL}});
 	arg = data->arg;
 	i = 0;
 	while (i < data->arg->len)
