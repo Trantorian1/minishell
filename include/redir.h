@@ -6,12 +6,12 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 13:12:00 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 13:20:24 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 17:06:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REDIR_HEREDOC_H
-# define REDIR_HEREDOC_H
+#ifndef REDIR_H
+# define REDIR_H
 
 # include <stdint.h>
 # include "s_cmd.h"

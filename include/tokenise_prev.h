@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 06:55:32 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 06:58:11 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 17:08:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,7 @@
 # include "dynamic/vector.h"
 # include "dynamic/string.h"
 
-uint8_t	tokenise_prev(
-	t_vptr *_Nonnull vptr,
-	t_str input,
-	size_t i_prev,
-	size_t i_curr
-);
+uint8_t	tokenise_prev(t_vptr *_Nonnull vptr, t_str input, size_t i_prev,
+			size_t i_curr);
 
 #endif

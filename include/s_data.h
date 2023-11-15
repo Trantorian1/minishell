@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 08:15:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/13 13:25:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 17:13:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,4 @@ typedef struct s_data
 	uint8_t				should_exit;
 }	t_data;
 
-#endif // !S_DATA_H
-
+#endif

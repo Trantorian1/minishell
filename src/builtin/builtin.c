@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 18:42:35 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 11:26:10 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 17:11:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 #include "e_builtin.h"
 #include "safe_close.h"
 
-static f_builtin	g_builtins[E_BUILTIN_SIZE] = {
+static t_f_builtin	g_builtins[E_BUILTIN_SIZE] = {
 	builtin_none,
 	builtin_echo,
 	builtin_cd,

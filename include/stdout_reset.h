@@ -6,12 +6,12 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 10:12:14 by marvin            #+#    #+#             */
-/*   Updated: 2023/09/06 12:51:54 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 17:08:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STDOUT_RESTORE_H
-# define STDOUT_RESTORE_H
+#ifndef STDOUT_RESET_H
+# define STDOUT_RESET_H
 
 # include <stdint.h>
 

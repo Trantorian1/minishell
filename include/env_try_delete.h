@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 20:32:44 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/11 20:42:23 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 17:09:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define ENV_TRY_DELETE_H
 
 # include <stdint.h>
-#include "dynamic/vector.h"
+# include "dynamic/vector.h"
 # include "dynamic/string.h"
 # include "s_env.h"
 

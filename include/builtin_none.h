@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:40:25 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/14 00:46:07 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 17:07:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,7 @@
 # include "s_data.h"
 # include "s_cmd.h"
 
-uint8_t	builtin_none(
-	t_data *_Nonnull data, 
-	t_cmd cmd, 
-	int32_t *_Nonnull pipe_fd,
-	bool in_child
-);
+uint8_t	builtin_none(t_data *_Nonnull data, t_cmd cmd,
+			int32_t *_Nonnull pipe_fd, bool in_child);
 
 #endif

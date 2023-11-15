@@ -6,12 +6,12 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 12:55:36 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/16 12:30:51 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/15 17:13:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_H
-# define PARSE_H
+#ifndef STATE_PARSE_H
+# define STATE_PARSE_H
 
 # include <stdint.h>
 # include "dynamic/string.h"

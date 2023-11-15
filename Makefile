@@ -6,7 +6,7 @@
 #    By: emcnab <emcnab@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 14:08:48 by emcnab            #+#    #+#              #
-#    Updated: 2023/11/14 13:36:48 by marvin           ###   ########.fr        #
+#    Updated: 2023/11/15 17:01:37 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ fclean: fclean_debug fclean_test fclean_final
 
 re: fclean_dynamic fclean_final
 	@echo "$(BOLD)$(BLUE)[ Rebuilding Final binary ]$(RESET)"
-	make final
+	make --silent final
 
 # **************************************************************************** #
 #                                   SUBMODULES                                 #
@@ -46,7 +46,7 @@ fclean_dynamic:
 #                                   FINAL TASK                                 #
 # **************************************************************************** #
 
-final: test
+final: dynamic
 	@echo "$(BOLD)$(BLUE)[ Building in Final Mode ]$(RESET)"
 	@make -j$(CORES) --silent --file=./build/build_final.mf
 
